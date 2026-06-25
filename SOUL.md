@@ -1,0 +1,194 @@
+# SOUL.md — Portal de Convocatorias Públicas
+
+## Alcance de este documento
+
+Este archivo es el entregable de proceso del Reto AI-First Fase 1 para este repositorio.
+
+No es el `SOUL.md` global de Hermes ubicado en `~/.hermes/SOUL.md`. No contiene personalidad del agente ni instrucciones globales. Las reglas operativas del proyecto están en `AGENTS.md`.
+
+## Proyecto
+
+Portal de Convocatorias Públicas del Reto AI-First Fase 1.
+
+El objetivo del proyecto es construir un portal web para publicar, consultar y administrar convocatorias públicas, siguiendo una metodología AI-First donde los cambios de código y documentación se generan con asistencia de Hermes/Codex y quedan documentados.
+
+## Repositorio
+
+- Repositorio: pendiente de URL remota configurada en Git.
+- Rama actual al crear este documento: `main`.
+- Estado inicial observado: repositorio sin commits todavía; `AGENTS.md` y este `SOUL.md` son archivos nuevos.
+
+## Stack técnico definido
+
+Según las reglas del proyecto en `AGENTS.md`, el stack será:
+
+- Next.js
+- TypeScript
+- Prisma
+- PostgreSQL
+
+## Arquitectura definida
+
+La arquitectura esperada del proyecto es:
+
+- Aplicación web con Next.js.
+- API REST ubicada en `app/api`.
+- Acceso a base de datos mediante Prisma.
+- Base de datos PostgreSQL.
+- Autenticación con JWT.
+- Hashing de contraseñas con `bcrypt`.
+- Validación de inputs con Zod.
+- Manejo de errores en todos los endpoints.
+
+## Plan técnico aprobado
+
+Se definió el plan técnico de construcción en `.hermes/plans/2026-06-25_110644-portal-convocatorias-plan-tecnico.md` usando el bundle `reto-dev` (`plan`, `codex`, `test-driven-development`, `systematic-debugging`, `requesting-code-review`, `github-pr-workflow`).
+
+El plan aprobado organiza el producto como un monolito Next.js con App Router, API REST en `app/api`, capa de servicios en `lib/`, Prisma Client como acceso a PostgreSQL e integración con datos.gov.co/SECOP mediante la API SODA `https://www.datos.gov.co/resource/p6dx-8zbt.json`.
+
+Alcance funcional planificado:
+
+- Autenticación: registro, login, logout y usuario actual con JWT, bcrypt y Zod.
+- Convocatorias: consulta en vivo a SECOP, filtros por texto, entidad, estado y fechas, normalización de respuesta y detalle por identificador externo.
+- Persistencia: usuarios, bookmarks y búsquedas guardadas en PostgreSQL mediante Prisma.
+- Frontend: landing, login, registro, browse de convocatorias, detalle, bookmarks, búsquedas guardadas y perfil.
+- Calidad: TDD para comportamiento nuevo, validación Zod en entradas externas, manejo de errores en endpoints, verificación por fase y revisión antes de commits relevantes.
+
+Fases de implementación aprobadas:
+
+1. Planificación y trazabilidad.
+2. Bootstrap de Next.js y calidad base.
+3. Prisma y modelo de datos PostgreSQL.
+4. Autenticación JWT con bcrypt y Zod.
+5. Integración SECOP/datos.gov.co.
+6. Bookmarks persistidos.
+7. Búsquedas guardadas.
+8. Frontend de autenticación y navegación.
+9. Frontend de convocatorias, bookmarks y búsquedas.
+10. Perfil, hardening y preparación de demo.
+
+## Reglas del proyecto usadas como base
+
+Este documento toma como fuente de reglas el archivo `AGENTS.md` en la raíz del repositorio. Las reglas principales son:
+
+- No escribir código manualmente: todo cambio de código debe ser generado por Hermes/Codex.
+- No guardar secretos, tokens, credenciales ni archivos `.env` en Git.
+- No modificar migraciones manualmente.
+- Todo endpoint debe tener manejo de errores.
+- Todo cambio importante debe actualizar `SOUL.md` o `docs/ai-log.md`.
+- Usar conventional commits en español o inglés.
+- Después de cada fase implementada, Hermes debe revisar `git status`, proponer un commit y pedir aprobación explícita antes de ejecutarlo.
+
+## Qué se construyó hasta ahora
+
+Hasta el momento de creación de este documento se construyó la base documental del proceso AI-First:
+
+1. `AGENTS.md`
+   - Define el contexto del proyecto.
+   - Registra las reglas AI-First.
+   - Define stack, arquitectura, seguridad, base de datos y convención de commits.
+
+2. `SOUL.md`
+   - Documenta el proceso del proyecto como entregable del reto.
+   - Distingue explícitamente este archivo del `SOUL.md` global de Hermes.
+   - Registra decisiones, trade-offs, bloqueos, soluciones y mejoras futuras.
+
+3. Workflow de commits
+   - Se definió un flujo obligatorio para cerrar fases: revisar `git status`, listar archivos modificados, resumir cambios, proponer un mensaje de commit en inglés y preguntar “¿Apruebas este commit?” antes de ejecutar cualquier commit.
+   - El flujo prohíbe hacer push y evita pedir aprobación archivo por archivo.
+
+4. Plan técnico del portal
+   - Se creó el plan técnico de implementación con arquitectura final, estructura de carpetas, modelo de datos, endpoints REST, pantallas, fases, criterios de aceptación y estrategia de commits por fase.
+   - El plan quedó guardado en `.hermes/plans/2026-06-25_110644-portal-convocatorias-plan-tecnico.md`.
+
+## Cómo se usó Hermes
+
+Hermes se utilizó como agente de desarrollo dentro del repositorio para:
+
+- Crear documentación del proyecto directamente en la raíz del repo.
+- Verificar el estado de Git antes de editar.
+- Revisar la existencia de archivos relevantes como `AGENTS.md`, `SOUL.md`, `package.json` y configuración de Prisma.
+- Escribir archivos mediante herramientas del agente, no mediante edición manual.
+- Verificar el contenido creado leyendo el archivo después de escribirlo.
+
+## Skills/prompts usados
+
+Skills y bundle usados durante la planificación:
+
+- Bundle `reto-dev`, definido en `/home/edog/.hermes/skill-bundles/reto-dev.yaml`.
+- `plan`, para crear un plan accionable sin implementar código.
+- `codex`, como parte del bundle para futuras fases de implementación asistida.
+- `test-driven-development`, para definir la estrategia TDD por fase.
+- `requesting-code-review`, para considerar revisión antes de commits relevantes.
+- `github-pr-workflow` y `git-workflow`, para alinear la estrategia de commits y PRs sin hacer push desde Hermes.
+- `database-migrations`, para respetar el uso de Prisma y no editar migraciones manualmente.
+
+Prompts relevantes usados por el usuario:
+
+- Crear `AGENTS.md` con reglas del proyecto para el Reto AI-First.
+- Crear `SOUL.md` como entregable del reto, aclarando que no debe confundirse con el `SOUL.md` global de Hermes.
+- Crear el plan técnico del Portal de Convocatorias Públicas usando el bundle `reto-dev`, sin implementar código todavía.
+
+## Decisiones tomadas
+
+- Separar reglas operativas en `AGENTS.md` y documentación de proceso en `SOUL.md`.
+- No incluir personalidad del agente ni instrucciones globales en este archivo.
+- Documentar el estado real observado del repositorio, sin inventar funcionalidades todavía no implementadas.
+- Marcar el enlace del repositorio como pendiente porque no hay URL remota configurada actualmente en Git.
+- Mantener este archivo como documentación viva, actualizable durante el desarrollo.
+- Formalizar un workflow de commits con aprobación humana explícita antes de cada commit, manteniendo trazabilidad sin hacer push desde Hermes.
+- Planificar una implementación incremental por fases para priorizar el flujo end-to-end exigido por el reto: auth, browse de convocatorias desde datos.gov.co y bookmarks persistidos.
+- Usar PostgreSQL como base de datos objetivo del proyecto, aunque el reto permitía PostgreSQL o SQLite, porque `AGENTS.md` fija PostgreSQL como stack del repositorio.
+
+## Trade-offs
+
+- Se documentó la arquitectura objetivo aunque todavía no existe implementación de Next.js, Prisma ni PostgreSQL en el árbol del repositorio observado.
+- Se priorizó claridad del proceso AI-First sobre detalle técnico de implementación, porque el proyecto aún está en fase inicial.
+- Se evitó declarar features como completadas para mantener trazabilidad honesta del avance.
+- Se decidió no implementar código durante la fase de planificación para mantener separación entre diseño técnico y ejecución.
+- Se priorizó un monolito Next.js con API REST interna sobre una separación frontend/backend independiente para reducir complejidad y llegar al demo end-to-end dentro del tiempo del reto.
+
+## Bloqueos encontrados
+
+- No se encontró `package.json`, configuración de Prisma ni estructura `app/api` en el repositorio al momento de crear este documento.
+- No se encontró URL remota configurada para enlazar el repositorio.
+- No existían commits todavía en la rama `main`.
+- La ruta solicitada `docs/context/reto-ai-first-fase1.pdf` no existe; el PDF disponible y leído fue `docs/context/2a-reto-ai-first-fase1.pdf`.
+
+## Soluciones aplicadas
+
+- Crear primero documentación base (`AGENTS.md` y `SOUL.md`) para fijar reglas y trazabilidad antes de implementar código.
+- Registrar explícitamente los pendientes y el estado real del repo.
+- Usar `AGENTS.md` como fuente normativa para las reglas del proyecto.
+- Crear un plan técnico versionable antes de iniciar la implementación.
+- Registrar en este documento la ruta real del PDF usado como contexto del reto.
+
+## Mejoras futuras
+
+- Inicializar el proyecto Next.js con TypeScript.
+- Configurar Prisma y PostgreSQL.
+- Crear estructura `app/api` para endpoints REST.
+- Implementar autenticación con JWT y hashing con `bcrypt`.
+- Agregar validación con Zod en todos los endpoints.
+- Diseñar modelos iniciales de Prisma para usuarios, convocatorias y entidades relacionadas.
+- Agregar manejo de errores consistente en la API.
+- Crear `docs/ai-log.md` para registrar decisiones y prompts de desarrollo posteriores.
+- Configurar linting, formatting y pruebas.
+- Agregar README con instrucciones de instalación, variables de entorno y ejecución local.
+- Configurar la URL remota del repositorio y actualizar este documento con el enlace real.
+
+## Convención de commits
+
+El proyecto debe usar conventional commits en español o inglés.
+
+Ejemplos:
+
+- `feat(auth): add JWT login`
+- `docs(ai): crear SOUL del reto AI-First`
+- `fix(api): manejar errores de validación`
+
+## Enlace al repositorio
+
+Pendiente: no hay remoto Git configurado actualmente.
+
+Cuando exista, actualizar esta sección con la URL pública o privada correspondiente.
