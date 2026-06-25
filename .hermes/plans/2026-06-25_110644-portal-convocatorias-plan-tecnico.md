@@ -143,6 +143,9 @@ Restricciones obligatorias:
 │   ├── ai-log.md
 │   └── context/
 │       └── 2a-reto-ai-first-fase1.pdf
+├── docker-compose.yml
+├── Dockerfile.dev
+├── .dockerignore
 ├── .env.example
 ├── AGENTS.md
 ├── SOUL.md
@@ -154,9 +157,115 @@ Nota: la estructura se creará gradualmente por fases. Este plan no implementa a
 
 ---
 
-## 4. Modelo de datos
+## 4. Ejecución local con Docker
 
-### 4.1 Entidades
+Objetivo: permitir levantar el portal localmente sin instalar Node.js ni PostgreSQL directamente en WSL. El único prerrequisito local será Docker con Docker Compose.
+
+### 4.1 Servicios de Docker Compose
+
+Se debe crear `docker-compose.yml` con dos servicios principales:
+
+1. `app`
+   - Construye la aplicación Next.js usando `Dockerfile.dev`.
+   - Expone la app en `http://localhost:3000` mediante el mapeo `3000:3000`.
+   - Monta el código del repositorio dentro del contenedor para desarrollo.
+   - Usa volumen separado para `node_modules` para evitar conflictos entre dependencias instaladas en Linux del contenedor y el filesystem montado desde WSL/Windows.
+   - Depende de `db`.
+   - Define `DATABASE_URL` apuntando al host interno `db`.
+
+2. `db`
+   - Usa una imagen oficial de PostgreSQL.
+   - Expone PostgreSQL solo dentro de la red de Compose como `db:5432` para la app.
+   - Persiste datos en un volumen de Docker.
+   - Configura usuario, password y base de datos de desarrollo sin secretos reales.
+
+### 4.2 Variables de entorno de desarrollo
+
+Para Prisma dentro de Docker Compose, la URL de conexión debe usar el hostname del servicio `db`:
+
+```env
+DATABASE_URL="postgresql://postgres:<dev-password>@db:5432/portal_convocatorias?schema=public"
+```
+
+Notas:
+- No usar `localhost` dentro del contenedor `app` para conectar a PostgreSQL; dentro de Compose el host correcto es `db`.
+- `.env.example` debe documentar esta URL para desarrollo Docker, sin secretos reales de producción.
+- Si se necesita conexión desde herramientas del host en una fase futura, se puede evaluar exponer `5432:5432`, pero el requisito base del plan es que PostgreSQL esté disponible internamente como `db:5432`.
+
+### 4.3 Archivos de infraestructura a crear en Fase 1
+
+#### `Dockerfile.dev`
+
+Responsabilidades:
+- Usar una imagen Node LTS.
+- Definir `/app` como directorio de trabajo.
+- Copiar `package.json` y lockfile cuando existan.
+- Instalar dependencias dentro del contenedor.
+- Exponer el puerto `3000`.
+- Ejecutar el servidor de desarrollo de Next.js escuchando en `0.0.0.0` para que el puerto sea accesible desde el host.
+
+#### `.dockerignore`
+
+Debe excluir, como mínimo:
+- `node_modules`
+- `.next`
+- `.git`
+- `.env`
+- logs y archivos temporales
+
+#### Volúmenes recomendados
+
+Se debe usar:
+- Un bind mount del repositorio hacia `/app` para desarrollo.
+- Un volumen nombrado para `/app/node_modules`.
+- Un volumen nombrado para datos de PostgreSQL.
+
+### 4.4 Comandos documentados
+
+Levantar la app y base de datos:
+
+```bash
+docker compose up --build
+```
+
+Detener y remover contenedores/red asociada:
+
+```bash
+docker compose down
+```
+
+Ejecutar migraciones Prisma desde el contenedor `app`:
+
+```bash
+docker compose exec app npx prisma migrate dev
+```
+
+Ejecutar lint desde el contenedor `app`:
+
+```bash
+docker compose exec app npm run lint
+```
+
+Ejecutar build desde el contenedor `app`:
+
+```bash
+docker compose exec app npm run build
+```
+
+### 4.5 Criterios de aceptación de ejecución local
+
+- `docker compose up --build` levanta `app` y `db` sin requerir Node.js ni PostgreSQL instalados directamente en WSL.
+- La aplicación queda disponible en `http://localhost:3000`.
+- El servicio `app` puede resolver PostgreSQL como `db:5432`.
+- Prisma usa `DATABASE_URL` con host `db` dentro de Compose.
+- `docker compose exec app npx prisma migrate dev` ejecuta migraciones contra el servicio `db`.
+- `docker compose exec app npm run lint` y `docker compose exec app npm run build` son los comandos oficiales de validación local.
+
+---
+
+## 5. Modelo de datos
+
+### 5.1 Entidades
 
 #### User
 
@@ -225,7 +334,7 @@ Relaciones:
 - Índice por `userId`.
 - Opcional: unique compuesto `userId + name` si se decide evitar nombres duplicados.
 
-### 4.2 Datos que NO se persistirán inicialmente
+### 5.2 Datos que NO se persistirán inicialmente
 
 - No se guardará una copia completa del dataset SECOP.
 - No se implementarán roles administrativos en la primera versión.
@@ -233,7 +342,7 @@ Relaciones:
 
 ---
 
-## 5. Endpoints REST necesarios
+## 6. Endpoints REST necesarios
 
 Todas las rutas deben:
 - Validar body/query/path params con Zod.
@@ -242,7 +351,7 @@ Todas las rutas deben:
 - No exponer stack traces ni secretos.
 - Usar Prisma para persistencia.
 
-### 5.1 Auth
+### 6.1 Auth
 
 #### `POST /api/auth/register`
 
@@ -302,7 +411,7 @@ Códigos esperados:
 - `200` usuario actual.
 - `401` no autenticado.
 
-### 5.2 Perfil
+### 6.2 Perfil
 
 #### `GET /api/profile`
 
@@ -322,7 +431,7 @@ Comportamiento:
 - Validar input.
 - Si cambia password, verificar contraseña actual y hashear nueva.
 
-### 5.3 Convocatorias SECOP
+### 6.3 Convocatorias SECOP
 
 #### `GET /api/convocatorias`
 
@@ -350,7 +459,7 @@ Comportamiento:
 - Normalizar detalle.
 - Opcionalmente incluir si el usuario autenticado ya lo guardó como bookmark.
 
-### 5.4 Bookmarks
+### 6.4 Bookmarks
 
 #### `GET /api/bookmarks`
 
@@ -383,7 +492,7 @@ Comportamiento:
 - Elimina bookmark del usuario para ese `externalId`.
 - Debe ser idempotente: si no existe, responder éxito o `404` según decisión de implementación; se recomienda `204` idempotente.
 
-### 5.5 Búsquedas guardadas
+### 6.5 Búsquedas guardadas
 
 #### `GET /api/saved-searches`
 
@@ -422,7 +531,7 @@ Comportamiento:
 
 ---
 
-## 6. Pantallas del frontend
+## 7. Pantallas del frontend
 
 ### Públicas
 
@@ -474,7 +583,7 @@ Comportamiento:
 
 ---
 
-## 7. Fases de implementación
+## 8. Fases de implementación
 
 ### Fase 0 — Planificación y trazabilidad
 
@@ -504,18 +613,24 @@ Actividades:
 - Crear proyecto Next.js App Router en el repo existente.
 - Configurar TypeScript.
 - Configurar lint/build scripts.
+- Crear `docker-compose.yml` con servicios `app` y `db`.
+- Crear `Dockerfile.dev` para ejecutar Next.js dentro de Docker.
+- Crear `.dockerignore` para excluir dependencias, build output, Git y archivos sensibles.
+- Configurar `.env.example` con `DATABASE_URL` para Prisma usando el host interno `db`.
 - Crear `.env.example` sin secretos.
-- Crear README inicial con ejecución local.
+- Crear README inicial con ejecución local mediante Docker Compose.
 - Crear `docs/ai-log.md` si no existe.
 
 Criterios de aceptación:
-- `npm install` completa correctamente.
-- `npm run lint` ejecuta sin errores nuevos.
-- `npm run build` ejecuta correctamente o queda documentado cualquier bloqueo real.
+- `docker compose up --build` levanta `app` y `db`.
+- La app queda expuesta en `http://localhost:3000`.
+- PostgreSQL queda disponible para la app como `db:5432`.
+- `docker compose exec app npm run lint` ejecuta sin errores nuevos.
+- `docker compose exec app npm run build` ejecuta correctamente o queda documentado cualquier bloqueo real.
 - No hay secretos ni `.env` versionado.
 
 Commit propuesto:
-- `chore(app): bootstrap nextjs typescript project`
+- `chore(dev): bootstrap nextjs docker environment`
 
 ### Fase 2 — Prisma y modelo de datos PostgreSQL
 
@@ -688,7 +803,7 @@ Commit propuesto:
 
 ---
 
-## 8. Estrategia de pruebas y validación
+## 9. Estrategia de pruebas y validación
 
 Regla general por el bundle `reto-dev`:
 - Implementación con TDD cuando se cree código de comportamiento.
@@ -701,15 +816,19 @@ Pruebas esperadas:
 - End-to-end manual/demo: registro → login → browse SECOP → bookmark → bookmarks → saved search → perfil/logout.
 
 Comandos previstos cuando exista el proyecto:
-- `npm run lint`
-- `npm run build`
-- `npm test` o comando equivalente configurado en `package.json`
-- `npx prisma validate`
-- `npx prisma generate`
+- `docker compose up --build`
+- `docker compose exec app npm run lint`
+- `docker compose exec app npm run build`
+- `docker compose exec app npm test` o comando equivalente configurado en `package.json`
+- `docker compose exec app npx prisma migrate dev`
+- `docker compose exec app npx prisma validate`
+- `docker compose exec app npx prisma generate`
+- `docker compose down`
+- Alternativamente, dentro del contenedor `app`: `npm run lint`, `npm run build` y `npm test`.
 
 ---
 
-## 9. Riesgos, trade-offs y decisiones
+## 10. Riesgos, trade-offs y decisiones
 
 1. Dataset SECOP externo
    - Riesgo: nombres de campos del dataset pueden no coincidir con los filtros deseados.
@@ -724,15 +843,19 @@ Comandos previstos cuando exista el proyecto:
    - Si se usa Authorization header por simplicidad inicial, documentar trade-off y evitar persistencia insegura.
 
 4. PostgreSQL en entorno local
-   - Riesgo: setup más pesado que SQLite.
-   - Mitigación: documentar `DATABASE_URL` en `.env.example` y usar Prisma para migraciones.
+   - Riesgo: setup más pesado que SQLite si se instala directamente en WSL.
+   - Mitigación: usar Docker Compose con servicio `db` y `DATABASE_URL` apuntando a `db:5432`.
 
 5. Alcance de 6 días hábiles
    - Decisión: priorizar flujo end-to-end mínimo funcional sobre features administrativas.
 
+6. Dependencias Node en bind mounts
+   - Riesgo: conflictos entre `node_modules` del host y del contenedor.
+   - Mitigación: usar volumen nombrado para `/app/node_modules` y excluir `node_modules` en `.dockerignore`.
+
 ---
 
-## 10. Checklist de cierre por fase
+## 11. Checklist de cierre por fase
 
 Antes de proponer commit en cada fase:
 - [ ] Releer `AGENTS.md` si hay duda de reglas.
@@ -749,7 +872,7 @@ Antes de proponer commit en cada fase:
 
 ---
 
-## 11. Primer commit de esta planificación
+## 12. Primer commit de esta planificación
 
 Archivos esperados:
 - `.hermes/plans/2026-06-25_110644-portal-convocatorias-plan-tecnico.md`

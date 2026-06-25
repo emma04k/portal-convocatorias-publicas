@@ -46,12 +46,15 @@ Se definió el plan técnico de construcción en `.hermes/plans/2026-06-25_11064
 
 El plan aprobado organiza el producto como un monolito Next.js con App Router, API REST en `app/api`, capa de servicios en `lib/`, Prisma Client como acceso a PostgreSQL e integración con datos.gov.co/SECOP mediante la API SODA `https://www.datos.gov.co/resource/p6dx-8zbt.json`.
 
+El plan fue ajustado para que la ejecución local no requiera instalar Node.js ni PostgreSQL directamente en WSL. La estrategia de desarrollo local usará Docker Compose con un servicio `app` para Next.js y un servicio `db` para PostgreSQL. La app se expondrá en `http://localhost:3000`; PostgreSQL estará disponible internamente como `db:5432`; Prisma usará `DATABASE_URL` apuntando al host `db`.
+
 Alcance funcional planificado:
 
 - Autenticación: registro, login, logout y usuario actual con JWT, bcrypt y Zod.
 - Convocatorias: consulta en vivo a SECOP, filtros por texto, entidad, estado y fechas, normalización de respuesta y detalle por identificador externo.
 - Persistencia: usuarios, bookmarks y búsquedas guardadas en PostgreSQL mediante Prisma.
 - Frontend: landing, login, registro, browse de convocatorias, detalle, bookmarks, búsquedas guardadas y perfil.
+- Ejecución local: Docker Compose, `Dockerfile.dev`, `.dockerignore`, volumen para `node_modules` y comandos dentro del contenedor `app`.
 - Calidad: TDD para comportamiento nuevo, validación Zod en entradas externas, manejo de errores en endpoints, verificación por fase y revisión antes de commits relevantes.
 
 Fases de implementación aprobadas:
@@ -101,6 +104,11 @@ Hasta el momento de creación de este documento se construyó la base documental
    - Se creó el plan técnico de implementación con arquitectura final, estructura de carpetas, modelo de datos, endpoints REST, pantallas, fases, criterios de aceptación y estrategia de commits por fase.
    - El plan quedó guardado en `.hermes/plans/2026-06-25_110644-portal-convocatorias-plan-tecnico.md`.
 
+5. Ejecución local con Docker
+   - Se ajustó el plan técnico para levantar el proyecto con Docker Compose sin instalar Node.js ni PostgreSQL directamente en WSL.
+   - Se documentó la futura creación de `docker-compose.yml`, `Dockerfile.dev`, `.dockerignore`, volumen de `node_modules`, servicio `app`, servicio `db`, `DATABASE_URL` con host `db` y comandos de operación local.
+   - Se creó `README.md` con la estrategia de ejecución local planificada.
+
 ## Cómo se usó Hermes
 
 Hermes se utilizó como agente de desarrollo dentro del repositorio para:
@@ -128,6 +136,7 @@ Prompts relevantes usados por el usuario:
 - Crear `AGENTS.md` con reglas del proyecto para el Reto AI-First.
 - Crear `SOUL.md` como entregable del reto, aclarando que no debe confundirse con el `SOUL.md` global de Hermes.
 - Crear el plan técnico del Portal de Convocatorias Públicas usando el bundle `reto-dev`, sin implementar código todavía.
+- Ajustar el plan técnico para ejecución local con Docker Compose antes de implementar código.
 
 ## Decisiones tomadas
 
@@ -139,6 +148,8 @@ Prompts relevantes usados por el usuario:
 - Formalizar un workflow de commits con aprobación humana explícita antes de cada commit, manteniendo trazabilidad sin hacer push desde Hermes.
 - Planificar una implementación incremental por fases para priorizar el flujo end-to-end exigido por el reto: auth, browse de convocatorias desde datos.gov.co y bookmarks persistidos.
 - Usar PostgreSQL como base de datos objetivo del proyecto, aunque el reto permitía PostgreSQL o SQLite, porque `AGENTS.md` fija PostgreSQL como stack del repositorio.
+- Usar Docker Compose como forma oficial de desarrollo local para evitar instalar Node.js y PostgreSQL directamente en WSL.
+- Definir que Prisma dentro del contenedor `app` debe conectarse a PostgreSQL usando `db:5432`, no `localhost`.
 
 ## Trade-offs
 
@@ -147,6 +158,8 @@ Prompts relevantes usados por el usuario:
 - Se evitó declarar features como completadas para mantener trazabilidad honesta del avance.
 - Se decidió no implementar código durante la fase de planificación para mantener separación entre diseño técnico y ejecución.
 - Se priorizó un monolito Next.js con API REST interna sobre una separación frontend/backend independiente para reducir complejidad y llegar al demo end-to-end dentro del tiempo del reto.
+- Se decidió documentar la infraestructura Docker antes de crearla, manteniendo la solicitud de no implementar código todavía.
+- Se aceptó que el entorno local dependa de Docker Compose para simplificar setup a cambio de requerir Docker instalado.
 
 ## Bloqueos encontrados
 
@@ -162,6 +175,8 @@ Prompts relevantes usados por el usuario:
 - Usar `AGENTS.md` como fuente normativa para las reglas del proyecto.
 - Crear un plan técnico versionable antes de iniciar la implementación.
 - Registrar en este documento la ruta real del PDF usado como contexto del reto.
+- Agregar sección “Ejecución local con Docker” al plan técnico.
+- Crear `README.md` con comandos previstos de Docker Compose, Prisma, lint y build.
 
 ## Mejoras futuras
 
