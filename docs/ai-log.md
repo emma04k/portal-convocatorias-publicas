@@ -79,3 +79,14 @@
 - Se implementó `middleware.ts` para redirigir usuarios sin cookie `auth_token` desde rutas privadas hacia `/auth/login?next=...`.
 - Se evitó importar helpers JWT/Node en middleware para mantener compatibilidad con Edge Runtime y eliminar warnings de build.
 - Verificación Docker realizada: `npm test` pasó con 38 tests, `npm run lint` pasó sin errores y `npm run build` pasó correctamente.
+
+## Fase 8 — Frontend de convocatorias, bookmarks y búsquedas
+
+- Se continuó con la siguiente fase pendiente del plan técnico: Fase 8 — Frontend de convocatorias, bookmarks y búsquedas.
+- Se aplicó TDD agregando pruebas RED para la experiencia de browse, detalle, favoritos y búsquedas guardadas.
+- Se creó `components/convocatorias/convocatorias-browser.tsx` con filtros por texto, entidad, estado y fechas, paginación simple, estados de carga/vacío/error, guardado de favoritos y guardado de búsquedas.
+- Se creó `components/convocatorias/convocatoria-card.tsx` para mostrar tarjetas de convocatorias con detalle, fuente SECOP y acción de favorito.
+- Se creó `components/convocatorias/convocatoria-detail.tsx` y la ruta `/convocatorias/[externalId]` para consultar detalle por identificador externo y guardarlo como favorito.
+- Se reemplazaron placeholders por gestores reales para `/bookmarks` y `/saved-searches`, con listado, ejecución de búsqueda guardada y eliminación idempotente.
+- Se agregaron estilos de filtros, tarjetas, grillas, metadata y detalle en `app/globals.css`.
+- Verificación Docker realizada: `npm test` pasó con 42 tests, `npm run lint` pasó sin errores y `npm run build` pasó correctamente.

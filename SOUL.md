@@ -163,6 +163,14 @@ Hasta el momento de creación de este documento se construyó la base documental
    - Se implementó middleware de protección frontend para redirigir rutas privadas sin cookie `auth_token` a `/auth/login?next=...`.
    - Se verificó dentro de Docker: `npm test` con 38 tests, `npm run lint` y `npm run build` sin warnings.
 
+13. Fase 8 — Frontend de convocatorias, bookmarks y búsquedas
+   - Se implementó la experiencia principal de browse en `/convocatorias` con filtros, paginación simple, estados de carga/vacío/error y acciones para guardar favoritos y búsquedas.
+   - Se creó detalle de convocatoria en `/convocatorias/[externalId]`, consultando el endpoint REST de SECOP y permitiendo guardar la convocatoria como favorito.
+   - Se reemplazaron placeholders de `/bookmarks` y `/saved-searches` por gestores cliente que listan recursos propios, enlazan a detalle/ejecución y permiten eliminar registros.
+   - Se agregaron componentes reutilizables para tarjetas, detalle y managers de recursos persistidos.
+   - Se añadieron estilos para filtros, grillas, tarjetas, metadata y detalle.
+   - Se verificó dentro de Docker: `npm test` con 42 tests, `npm run lint` y `npm run build`.
+
 ## Cómo se usó Hermes
 
 Hermes se utilizó como agente de desarrollo dentro del repositorio para:
