@@ -115,6 +115,16 @@ Hasta el momento de creación de este documento se construyó la base documental
    - Se creó la base de Next.js con TypeScript, scripts `dev`, `lint`, `build` y `start`, estructura `app/`, estilos globales y pantalla inicial.
    - Se creó la infraestructura de desarrollo local con `docker-compose.yml`, `Dockerfile.dev`, `.dockerignore`, `.env.example`, volumen para `node_modules` y servicio PostgreSQL interno `db:5432`.
    - Se creó `docs/ai-log.md` para registrar el avance AI-First por fases.
+   - Se resolvió el bloqueo de `docker compose config` creando un `.env` local de desarrollo no versionado y confirmando que `.env` está ignorado por Git.
+   - Se corrigieron bloqueos posteriores de Docker: builds reproducibles con `package-lock.json` + `npm ci`, instalación de `openssl` para Prisma en Alpine y eliminación de `NODE_ENV: development` para permitir `next build`.
+   - Se validó Docker con flujo no bloqueante: `docker compose up -d --build`, `docker compose ps`, lint, build y `docker compose down`.
+
+7. Fase 2 — Prisma y modelo de datos PostgreSQL
+   - Se continuó con la siguiente fase pendiente del plan técnico después de resolver Docker.
+   - Se creó `prisma/schema.prisma` para PostgreSQL con modelos `User`, `Bookmark` y `SavedSearch`.
+   - Se generó mediante Prisma la migración inicial `20260625174451_init_data_model` sin editar migraciones manualmente.
+   - Se creó `lib/db/prisma.ts` como singleton de Prisma Client para el runtime de Next.js.
+   - Se verificó dentro de Docker: `prisma validate`, `prisma migrate dev`, `prisma generate`, `npm run lint` y `npm run build`.
 
 ## Cómo se usó Hermes
 
@@ -177,7 +187,8 @@ Prompts relevantes usados por el usuario:
 - No se encontró URL remota configurada para enlazar el repositorio.
 - No existían commits todavía en la rama `main`.
 - La ruta solicitada `docs/context/reto-ai-first-fase1.pdf` no existe; el PDF disponible y leído fue `docs/context/2a-reto-ai-first-fase1.pdf`.
-- Docker Desktop no tiene habilitada la integración con esta distro WSL; `docker compose config` falla indicando que el comando `docker` no está disponible dentro de la distro.
+- El bloqueo vigente de Docker cambió durante la implementación: la integración Docker/WSL ya estaba disponible, pero `docker compose config` fallaba porque faltaba un `.env` local con `DATABASE_URL` y `POSTGRES_PASSWORD`.
+- Durante la validación aparecieron dos bloqueos adicionales ya resueltos: `npm install` dentro de Docker tardaba demasiado sin lockfile reproducible, y Prisma en Alpine necesitaba OpenSSL para ejecutar migraciones.
 
 ## Soluciones aplicadas
 
@@ -189,7 +200,13 @@ Prompts relevantes usados por el usuario:
 - Agregar sección “Ejecución local con Docker” al plan técnico.
 - Crear `README.md` con comandos previstos de Docker Compose, Prisma, lint y build.
 - Crear los archivos de bootstrap de Next.js y Docker de Fase 1.
-- Validar al menos la sintaxis JSON de `package.json`; la verificación completa con Docker queda bloqueada hasta habilitar integración WSL en Docker Desktop.
+- Crear un `.env` local de desarrollo no versionado para satisfacer `docker compose config` sin commitear secretos.
+- Confirmar que `.env` está protegido por `.gitignore`.
+- Usar `package-lock.json` y `npm ci --no-audit --no-fund` en Docker para builds reproducibles.
+- Instalar `openssl` en la imagen de desarrollo para que Prisma funcione en Alpine.
+- Remover `NODE_ENV: development` de Compose para que `next build` use el entorno correcto.
+- Validar Docker con flujo no bloqueante y cerrar contenedores con `docker compose down`.
+- Configurar Prisma, generar la migración inicial y validar el modelo de datos PostgreSQL.
 
 ## Mejoras futuras
 

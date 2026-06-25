@@ -225,7 +225,8 @@ Se debe usar:
 Levantar la app y base de datos:
 
 ```bash
-docker compose up --build
+docker compose up -d --build
+docker compose ps
 ```
 
 Detener y remover contenedores/red asociada:
@@ -816,7 +817,8 @@ Pruebas esperadas:
 - End-to-end manual/demo: registro → login → browse SECOP → bookmark → bookmarks → saved search → perfil/logout.
 
 Comandos previstos cuando exista el proyecto:
-- `docker compose up --build`
+- `docker compose up -d --build`
+- `docker compose ps`
 - `docker compose exec app npm run lint`
 - `docker compose exec app npm run build`
 - `docker compose exec app npm test` o comando equivalente configurado en `package.json`

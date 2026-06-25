@@ -6,7 +6,6 @@ services:
     ports:
       - "3000:3000"
     environment:
-      NODE_ENV: development
       DATABASE_URL: ${DATABASE_URL:?Set DATABASE_URL in .env using host db}
     volumes:
       - .:/app

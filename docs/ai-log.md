@@ -10,4 +10,16 @@
 - Se agregó `.env.example` sin secretos reales y con placeholders/valores de desarrollo.
 - Para no guardar credenciales reales, `docker-compose.yml` exige definir `DATABASE_URL` y `POSTGRES_PASSWORD` en un `.env` local no versionado.
 - Verificación realizada: `package.json` es JSON válido.
-- Bloqueo de verificación: Docker Desktop no tiene habilitada la integración con esta distro WSL, por lo que `docker compose config` falla y los comandos `docker compose` no se pueden ejecutar todavía desde este entorno.
+- Bloqueo resuelto: se creó un `.env` local de desarrollo no versionado con `DATABASE_URL` y `POSTGRES_PASSWORD`; `.env` está cubierto por `.gitignore` y `docker compose config` vuelve a ejecutar correctamente.
+- Ajuste adicional de Docker: se generó `package-lock.json`, `Dockerfile.dev` pasó de `npm install` a `npm ci --no-audit --no-fund` para builds reproducibles, y se instaló `openssl` en la imagen Alpine para evitar fallos de Prisma.
+- Ajuste de build: se removió `NODE_ENV: development` del servicio `app` porque rompía `next build`; Next.js ya define el entorno adecuado por comando.
+- Verificación Docker no bloqueante realizada: `docker compose up -d --build`, `docker compose ps`, `docker compose exec app npm run lint`, `docker compose exec app npm run build` y `docker compose down` ejecutaron correctamente.
+
+## Fase 2 — Prisma y modelo de datos PostgreSQL
+
+- Se continuó con la siguiente fase pendiente del plan técnico: Fase 2 — Prisma y modelo de datos PostgreSQL.
+- Se creó `prisma/schema.prisma` con datasource PostgreSQL y generator de Prisma Client.
+- Se definieron los modelos `User`, `Bookmark` y `SavedSearch`, incluyendo índices, constraints únicos, relaciones y nombres de tablas/columnas mapeados a snake_case.
+- Se creó `lib/db/prisma.ts` como Prisma Client singleton para reutilizar conexión en desarrollo.
+- La migración inicial fue generada y aplicada mediante Prisma dentro de Docker: `20260625174451_init_data_model`.
+- Verificación realizada dentro de Docker: `npx prisma validate`, `npx prisma migrate dev --name init_data_model`, `npx prisma generate`, `npm run lint` y `npm run build` pasaron correctamente.

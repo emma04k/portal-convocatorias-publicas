@@ -52,7 +52,8 @@ Antes de levantar el entorno, copia `.env.example` a `.env` y reemplaza los plac
 Levantar la app y la base de datos:
 
 ```bash
-docker compose up --build
+docker compose up -d --build
+docker compose ps
 ```
 
 Detener los servicios:

@@ -1,0 +1,58 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String        @id @default(cuid())
+  email        String        @unique
+  name         String
+  passwordHash String        @map("password_hash")
+  createdAt    DateTime      @default(now()) @map("created_at")
+  updatedAt    DateTime      @updatedAt @map("updated_at")
+  bookmarks    Bookmark[]
+  savedSearches SavedSearch[]
+
+  @@map("users")
+}
+
+model Bookmark {
+  id            String   @id @default(cuid())
+  userId        String   @map("user_id")
+  externalId    String   @map("external_id")
+  source        String   @default("SECOP_I")
+  title         String
+  entityName    String   @map("entity_name")
+  status        String?
+  processNumber String?  @map("process_number")
+  url           String?
+  rawData       Json     @map("raw_data")
+  createdAt     DateTime @default(now()) @map("created_at")
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, externalId, source])
+  @@index([userId])
+  @@map("bookmarks")
+}
+
+model SavedSearch {
+  id         String   @id @default(cuid())
+  userId     String   @map("user_id")
+  name       String
+  query      String?
+  entityName String?  @map("entity_name")
+  status     String?
+  dateFrom   DateTime? @map("date_from")
+  dateTo     DateTime? @map("date_to")
+  filters    Json?
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("saved_searches")
+}
