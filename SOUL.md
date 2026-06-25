@@ -155,6 +155,14 @@ Hasta el momento de creación de este documento se construyó la base documental
    - Se preservan filtros JSON para poder reabrir `/convocatorias` con los criterios guardados.
    - Se verificó dentro de Docker: `npm test` con 32 tests, `npm run lint` y `npm run build`.
 
+12. Fase 7 — Frontend de autenticación y navegación
+   - Se creó navegación global con enlaces a landing, convocatorias, favoritos, búsquedas guardadas, perfil, login, registro y logout.
+   - Se implementaron páginas públicas `/auth/login` y `/auth/register` con formularios cliente conectados a los endpoints REST de autenticación existentes.
+   - La landing se actualizó con llamadas a la acción para explorar convocatorias, crear cuenta e iniciar sesión.
+   - Se agregaron páginas privadas placeholder para `/convocatorias`, `/bookmarks`, `/saved-searches` y `/profile` para preparar la experiencia UI posterior.
+   - Se implementó middleware de protección frontend para redirigir rutas privadas sin cookie `auth_token` a `/auth/login?next=...`.
+   - Se verificó dentro de Docker: `npm test` con 38 tests, `npm run lint` y `npm run build` sin warnings.
+
 ## Cómo se usó Hermes
 
 Hermes se utilizó como agente de desarrollo dentro del repositorio para:

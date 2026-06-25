@@ -67,3 +67,15 @@
 - Las rutas crean búsquedas asociadas al usuario autenticado, listan solo las propias, actualizan con `updateMany` restringido por `id + userId` y borran de forma idempotente con `deleteMany`.
 - Las respuestas convierten fechas a `YYYY-MM-DD`, omiten `userId` y preservan filtros JSON para reabrir `/convocatorias` con los mismos criterios.
 - Verificación Docker realizada: `npm test` pasó con 32 tests, `npm run lint` pasó sin errores y `npm run build` pasó correctamente.
+
+## Fase 7 — Frontend de autenticación y navegación
+
+- Se continuó con la siguiente fase pendiente del plan técnico: Fase 7 — Frontend de autenticación y navegación.
+- Se aplicó TDD agregando pruebas RED para landing, formularios de autenticación, navegación global y middleware de protección de rutas privadas.
+- Se creó navegación global reutilizable en `components/layout/site-nav.tsx`, con enlaces a landing, convocatorias, favoritos, búsquedas guardadas, perfil, login, registro y logout.
+- Se crearon formularios cliente para login y registro en `components/auth/auth-form.tsx`, conectados a `POST /api/auth/login` y `POST /api/auth/register`, con redirección a `/convocatorias` tras autenticación exitosa.
+- Se agregaron páginas públicas `/auth/login` y `/auth/register` y se mejoró la landing con llamadas a la acción.
+- Se agregaron páginas privadas placeholder para `/convocatorias`, `/bookmarks`, `/saved-searches` y `/profile`, preparando la navegación de las siguientes fases.
+- Se implementó `middleware.ts` para redirigir usuarios sin cookie `auth_token` desde rutas privadas hacia `/auth/login?next=...`.
+- Se evitó importar helpers JWT/Node en middleware para mantener compatibilidad con Edge Runtime y eliminar warnings de build.
+- Verificación Docker realizada: `npm test` pasó con 38 tests, `npm run lint` pasó sin errores y `npm run build` pasó correctamente.
