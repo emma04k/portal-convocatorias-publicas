@@ -35,3 +35,14 @@
 - Se marcaron las rutas de auth como dinámicas para evitar prerender estático durante `next build`.
 - Verificación Docker realizada: `npm test` pasó con 10 tests, `npm run lint` pasó sin errores y `npm run build` pasó correctamente.
 - Revisión de seguridad: `npm audit --audit-level=high` reporta vulnerabilidades transitivas pendientes en Next.js/eslint-config-next y bcrypt que requieren upgrades mayores (`next@16`, `eslint-config-next@16`, `bcrypt@6`) y se dejan como hardening pendiente para no mezclar cambios breaking sin una fase dedicada.
+
+## Fase 4 — Integración SECOP/datos.gov.co
+
+- Se continuó con la siguiente fase pendiente del plan técnico: Fase 4 — Integración SECOP/datos.gov.co.
+- Se aplicó TDD agregando pruebas RED para validación de filtros, mapper de registros SECOP, cliente SODA y rutas REST de convocatorias.
+- Se creó `lib/validators/convocatorias.ts` para validar `q`, `entity`, `status`, fechas ISO, `limit`, `offset` e identificadores externos.
+- Se creó la capa `lib/secop/` con tipos, mapper y cliente para consultar `https://www.datos.gov.co/resource/p6dx-8zbt.json` sin API key, usando parámetros SODA seguros y normalizando el shape externo a un DTO estable.
+- Se implementaron `GET /api/convocatorias` y `GET /api/convocatorias/[externalId]` con manejo de errores de validación, upstream SECOP no disponible, no encontrado y errores internos.
+- Se inspeccionaron campos reales del dataset SECOP II (`id_del_proceso`, `entidad`, `estado_resumen`, `fecha_de_publicacion_del`, `urlproceso`, entre otros) antes de mapear filtros y respuesta.
+- Verificación Docker realizada: `npm test` pasó con 19 tests, `npm run lint` pasó sin errores y `npm run build` pasó correctamente.
+- Verificación en vivo realizada contra la API local: `GET http://localhost:3000/api/convocatorias?limit=1&q=DANE` respondió `200` con una convocatoria normalizada desde datos.gov.co.

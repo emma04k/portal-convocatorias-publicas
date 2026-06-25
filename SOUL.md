@@ -133,6 +133,13 @@ Hasta el momento de creación de este documento se construyó la base documental
    - Se agregó Vitest y pruebas TDD para validadores, JWT y rutas de auth; la validación final en Docker pasó con 10 tests, lint y build.
    - Se ejecutó `npm audit --audit-level=high`; quedan vulnerabilidades transitivas en Next.js/eslint-config-next y bcrypt que requieren upgrades mayores y deben tratarse como hardening controlado.
 
+9. Fase 4 — Integración SECOP/datos.gov.co
+   - Se implementó la consulta pública de convocatorias desde datos.gov.co usando la API SODA del dataset SECOP II `p6dx-8zbt`.
+   - Se crearon validadores Zod para filtros de convocatorias, tipos y mapper de normalización en `lib/secop/`, y endpoints REST `GET /api/convocatorias` y `GET /api/convocatorias/[externalId]`.
+   - Se validan `q`, `entity`, `status`, fechas, paginación e identificadores externos antes de consultar el upstream.
+   - Los endpoints manejan errores de validación, errores controlados del upstream SECOP, registros no encontrados y errores internos sin exponer stack traces al cliente.
+   - Se verificó dentro de Docker: `npm test` con 19 tests, `npm run lint`, `npm run build` y una consulta local real a `/api/convocatorias?limit=1&q=DANE` con respuesta `200`.
+
 ## Cómo se usó Hermes
 
 Hermes se utilizó como agente de desarrollo dentro del repositorio para:
