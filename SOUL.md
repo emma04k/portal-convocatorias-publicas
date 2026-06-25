@@ -147,6 +147,14 @@ Hasta el momento de creación de este documento se construyó la base documental
    - El borrado es idempotente y restringido al usuario autenticado; las respuestas no exponen `userId`.
    - Se verificó dentro de Docker: `npm test` con 25 tests, `npm run lint` y `npm run build`.
 
+11. Fase 6 — Búsquedas guardadas
+   - Se implementó CRUD REST protegido para búsquedas guardadas con `GET /api/saved-searches`, `POST /api/saved-searches`, `PATCH /api/saved-searches/[id]` y `DELETE /api/saved-searches/[id]`.
+   - Los endpoints reutilizan JWT/cookie, validan inputs con Zod y usan Prisma sobre el modelo `SavedSearch` existente.
+   - Cada operación deriva `userId` desde la sesión autenticada; no se acepta ownership desde el cliente.
+   - Las actualizaciones y borrados se restringen por `id + userId`, evitando acceso a búsquedas de otros usuarios.
+   - Se preservan filtros JSON para poder reabrir `/convocatorias` con los criterios guardados.
+   - Se verificó dentro de Docker: `npm test` con 32 tests, `npm run lint` y `npm run build`.
+
 ## Cómo se usó Hermes
 
 Hermes se utilizó como agente de desarrollo dentro del repositorio para:

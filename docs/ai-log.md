@@ -57,3 +57,13 @@
 - `DELETE /api/bookmarks/[externalId]` es idempotente y borra únicamente el favorito del usuario autenticado con fuente `SECOP_II` por defecto.
 - Las respuestas omiten `userId` para no exponer detalles internos de ownership.
 - Verificación Docker realizada: `npm test` pasó con 25 tests, `npm run lint` pasó sin errores y `npm run build` pasó correctamente.
+
+## Fase 6 — Búsquedas guardadas
+
+- Se continuó con la siguiente fase pendiente del plan técnico: Fase 6 — Búsquedas guardadas.
+- Se aplicó TDD agregando pruebas RED para validadores y CRUD REST protegido de búsquedas guardadas.
+- Se creó `lib/validators/saved-searches.ts` para validar nombre, query, entidad, estado, fechas ISO, filtros adicionales y parámetros de ruta.
+- Se implementaron `GET /api/saved-searches`, `POST /api/saved-searches`, `PATCH /api/saved-searches/[id]` y `DELETE /api/saved-searches/[id]` con autenticación JWT/cookie y ownership por `userId`.
+- Las rutas crean búsquedas asociadas al usuario autenticado, listan solo las propias, actualizan con `updateMany` restringido por `id + userId` y borran de forma idempotente con `deleteMany`.
+- Las respuestas convierten fechas a `YYYY-MM-DD`, omiten `userId` y preservan filtros JSON para reabrir `/convocatorias` con los mismos criterios.
+- Verificación Docker realizada: `npm test` pasó con 32 tests, `npm run lint` pasó sin errores y `npm run build` pasó correctamente.
