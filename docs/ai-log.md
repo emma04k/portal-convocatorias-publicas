@@ -90,3 +90,16 @@
 - Se reemplazaron placeholders por gestores reales para `/bookmarks` y `/saved-searches`, con listado, ejecución de búsqueda guardada y eliminación idempotente.
 - Se agregaron estilos de filtros, tarjetas, grillas, metadata y detalle en `app/globals.css`.
 - Verificación Docker realizada: `npm test` pasó con 42 tests, `npm run lint` pasó sin errores y `npm run build` pasó correctamente.
+
+## Fase 9 — Perfil, hardening y demo
+
+- Se continuó con la última fase pendiente del plan técnico: Fase 9 — Perfil, hardening y demo.
+- Se aplicó TDD agregando pruebas RED para validadores de perfil, endpoint protegido, pantalla de perfil y documentación del flujo demo.
+- Se creó `GET /api/profile` para devolver usuario seguro y conteos de favoritos/búsquedas del usuario autenticado.
+- Se creó `PATCH /api/profile` para actualizar nombre/email y cambiar contraseña verificando la contraseña actual antes de rehashear con bcrypt.
+- Se agregó `lib/validators/profile.ts` para normalizar email, validar nombre/passwords y exigir cambios explícitos.
+- Se reemplazó el placeholder de `/profile` por `components/profile/profile-manager.tsx`, con edición de cuenta, cambio de contraseña y métricas de actividad.
+- Se completó `README.md` con setup, endpoints, flujo demo end-to-end y checklist de seguridad básica.
+- Revisión de seguridad básica: `.env` no está versionado; `.env.example` sí; no se encontraron secretos reales en el árbol versionable, solo secretos sintéticos de tests/placeholders.
+- Verificación Docker realizada: `npm test` pasó con 51 tests, `npm run lint` pasó sin errores y `npm run build` pasó correctamente.
+- `npm audit --audit-level=high` sigue reportando vulnerabilidades en Next.js/eslint-config-next/bcrypt transitivas; `npm audit fix --force` propone upgrades breaking y queda documentado para evaluación explícita posterior.

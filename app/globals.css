@@ -314,6 +314,34 @@ p {
   gap: 1.25rem;
 }
 
+.profile-stats {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.stat-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 1.5rem;
+  box-shadow: 0 16px 48px rgba(23, 32, 51, 0.06);
+}
+
+.stat-card span {
+  color: var(--accent);
+  display: block;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 800;
+  line-height: 1;
+}
+
+.stat-card p {
+  color: var(--muted);
+  font-weight: 700;
+  margin: 0.75rem 0 0;
+}
+
 @media (max-width: 760px) {
   .site-header {
     align-items: flex-start;

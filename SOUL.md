@@ -100,9 +100,10 @@ Hasta el momento de creación de este documento se construyó la base documental
    - Se definió un flujo obligatorio para cerrar fases: revisar `git status`, listar archivos modificados, resumir cambios, proponer un mensaje de commit en inglés y preguntar “¿Apruebas este commit?” antes de ejecutar cualquier commit.
    - El flujo prohíbe hacer push y evita pedir aprobación archivo por archivo.
 
-4. Plan técnico del portal
+4. Fase 0 — Planificación y trazabilidad / Plan técnico del portal
    - Se creó el plan técnico de implementación con arquitectura final, estructura de carpetas, modelo de datos, endpoints REST, pantallas, fases, criterios de aceptación y estrategia de commits por fase.
    - El plan quedó guardado en `.hermes/plans/2026-06-25_110644-portal-convocatorias-plan-tecnico.md`.
+   - Esta fase no implementó código de aplicación; dejó trazabilidad documental, reglas de trabajo y el flujo de commits aprobado para ejecutar las fases posteriores.
 
 5. Ejecución local con Docker
    - Se ajustó el plan técnico para levantar el proyecto con Docker Compose sin instalar Node.js ni PostgreSQL directamente en WSL.
@@ -170,6 +171,15 @@ Hasta el momento de creación de este documento se construyó la base documental
    - Se agregaron componentes reutilizables para tarjetas, detalle y managers de recursos persistidos.
    - Se añadieron estilos para filtros, grillas, tarjetas, metadata y detalle.
    - Se verificó dentro de Docker: `npm test` con 42 tests, `npm run lint` y `npm run build`.
+
+14. Fase 9 — Perfil, hardening y demo
+   - Se implementó `GET /api/profile` para exponer usuario seguro y conteos de actividad del usuario autenticado.
+   - Se implementó `PATCH /api/profile` para editar nombre/email y cambiar contraseña validando la contraseña actual y rehasheando con bcrypt.
+   - Se agregó pantalla de perfil con edición de cuenta, cambio de contraseña y métricas de favoritos/búsquedas guardadas.
+   - Se completó `README.md` con comandos de setup, endpoints, flujo demo end-to-end y checklist de seguridad básica.
+   - Se revisó que `.env` no esté versionado y que no haya secretos reales en el árbol versionable; los hallazgos fueron placeholders o secretos sintéticos de tests.
+   - Se verificó dentro de Docker: `npm test` con 51 tests, `npm run lint` y `npm run build`.
+   - `npm audit --audit-level=high` conserva vulnerabilidades transitivas que requieren upgrades breaking (`next`, `eslint-config-next`, `bcrypt`); se documenta como riesgo pendiente para una decisión explícita de upgrade.
 
 ## Cómo se usó Hermes
 
