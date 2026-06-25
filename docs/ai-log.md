@@ -46,3 +46,14 @@
 - Se inspeccionaron campos reales del dataset SECOP II (`id_del_proceso`, `entidad`, `estado_resumen`, `fecha_de_publicacion_del`, `urlproceso`, entre otros) antes de mapear filtros y respuesta.
 - Verificación Docker realizada: `npm test` pasó con 19 tests, `npm run lint` pasó sin errores y `npm run build` pasó correctamente.
 - Verificación en vivo realizada contra la API local: `GET http://localhost:3000/api/convocatorias?limit=1&q=DANE` respondió `200` con una convocatoria normalizada desde datos.gov.co.
+
+## Fase 5 — Bookmarks persistidos
+
+- Se continuó con la siguiente fase pendiente del plan técnico: Fase 5 — Bookmarks persistidos.
+- Se aplicó TDD agregando pruebas RED para validadores y rutas protegidas de bookmarks antes de crear la implementación.
+- Se creó `lib/validators/bookmarks.ts` para validar payloads de favoritos, fuente, URL opcional, `rawData` e identificadores de ruta.
+- Se implementaron `GET /api/bookmarks`, `POST /api/bookmarks` y `DELETE /api/bookmarks/[externalId]` usando JWT/cookie existente, Prisma y ownership por `userId`.
+- `POST /api/bookmarks` usa `upsert` sobre el índice único `userId + externalId + source` para evitar duplicados y devolver el favorito existente cuando corresponde.
+- `DELETE /api/bookmarks/[externalId]` es idempotente y borra únicamente el favorito del usuario autenticado con fuente `SECOP_II` por defecto.
+- Las respuestas omiten `userId` para no exponer detalles internos de ownership.
+- Verificación Docker realizada: `npm test` pasó con 25 tests, `npm run lint` pasó sin errores y `npm run build` pasó correctamente.

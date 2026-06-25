@@ -140,6 +140,13 @@ Hasta el momento de creación de este documento se construyó la base documental
    - Los endpoints manejan errores de validación, errores controlados del upstream SECOP, registros no encontrados y errores internos sin exponer stack traces al cliente.
    - Se verificó dentro de Docker: `npm test` con 19 tests, `npm run lint`, `npm run build` y una consulta local real a `/api/convocatorias?limit=1&q=DANE` con respuesta `200`.
 
+10. Fase 5 — Bookmarks persistidos
+   - Se implementaron favoritos persistidos por usuario con `GET /api/bookmarks`, `POST /api/bookmarks` y `DELETE /api/bookmarks/[externalId]`.
+   - Los endpoints reutilizan la autenticación JWT/cookie existente, validan inputs con Zod y usan Prisma para listar, crear y borrar favoritos por `userId`.
+   - La creación usa `upsert` para respetar el índice único `userId + externalId + source` y evitar duplicados.
+   - El borrado es idempotente y restringido al usuario autenticado; las respuestas no exponen `userId`.
+   - Se verificó dentro de Docker: `npm test` con 25 tests, `npm run lint` y `npm run build`.
+
 ## Cómo se usó Hermes
 
 Hermes se utilizó como agente de desarrollo dentro del repositorio para:
