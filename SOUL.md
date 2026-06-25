@@ -109,6 +109,13 @@ Hasta el momento de creación de este documento se construyó la base documental
    - Se documentó la futura creación de `docker-compose.yml`, `Dockerfile.dev`, `.dockerignore`, volumen de `node_modules`, servicio `app`, servicio `db`, `DATABASE_URL` con host `db` y comandos de operación local.
    - Se creó `README.md` con la estrategia de ejecución local planificada.
 
+6. Fase 1 — Bootstrap Next.js y entorno Docker
+   - Se determinó que la última fase completada y commiteada era la Fase 0: planificación y trazabilidad.
+   - Se continuó únicamente con la siguiente fase pendiente: Fase 1 — Bootstrap del proyecto Next.js y calidad base.
+   - Se creó la base de Next.js con TypeScript, scripts `dev`, `lint`, `build` y `start`, estructura `app/`, estilos globales y pantalla inicial.
+   - Se creó la infraestructura de desarrollo local con `docker-compose.yml`, `Dockerfile.dev`, `.dockerignore`, `.env.example`, volumen para `node_modules` y servicio PostgreSQL interno `db:5432`.
+   - Se creó `docs/ai-log.md` para registrar el avance AI-First por fases.
+
 ## Cómo se usó Hermes
 
 Hermes se utilizó como agente de desarrollo dentro del repositorio para:
@@ -137,6 +144,7 @@ Prompts relevantes usados por el usuario:
 - Crear `SOUL.md` como entregable del reto, aclarando que no debe confundirse con el `SOUL.md` global de Hermes.
 - Crear el plan técnico del Portal de Convocatorias Públicas usando el bundle `reto-dev`, sin implementar código todavía.
 - Ajustar el plan técnico para ejecución local con Docker Compose antes de implementar código.
+- Determinar la última fase completada y continuar únicamente con la siguiente fase pendiente del plan técnico.
 
 ## Decisiones tomadas
 
@@ -150,6 +158,7 @@ Prompts relevantes usados por el usuario:
 - Usar PostgreSQL como base de datos objetivo del proyecto, aunque el reto permitía PostgreSQL o SQLite, porque `AGENTS.md` fija PostgreSQL como stack del repositorio.
 - Usar Docker Compose como forma oficial de desarrollo local para evitar instalar Node.js y PostgreSQL directamente en WSL.
 - Definir que Prisma dentro del contenedor `app` debe conectarse a PostgreSQL usando `db:5432`, no `localhost`.
+- No guardar `.env` ni credenciales reales; `docker-compose.yml` requiere variables locales desde `.env` para `DATABASE_URL` y `POSTGRES_PASSWORD`.
 
 ## Trade-offs
 
@@ -160,6 +169,7 @@ Prompts relevantes usados por el usuario:
 - Se priorizó un monolito Next.js con API REST interna sobre una separación frontend/backend independiente para reducir complejidad y llegar al demo end-to-end dentro del tiempo del reto.
 - Se decidió documentar la infraestructura Docker antes de crearla, manteniendo la solicitud de no implementar código todavía.
 - Se aceptó que el entorno local dependa de Docker Compose para simplificar setup a cambio de requerir Docker instalado.
+- Se evitó instalar dependencias Node directamente en WSL; la instalación queda encapsulada en `Dockerfile.dev`.
 
 ## Bloqueos encontrados
 
@@ -167,6 +177,7 @@ Prompts relevantes usados por el usuario:
 - No se encontró URL remota configurada para enlazar el repositorio.
 - No existían commits todavía en la rama `main`.
 - La ruta solicitada `docs/context/reto-ai-first-fase1.pdf` no existe; el PDF disponible y leído fue `docs/context/2a-reto-ai-first-fase1.pdf`.
+- Docker Desktop no tiene habilitada la integración con esta distro WSL; `docker compose config` falla indicando que el comando `docker` no está disponible dentro de la distro.
 
 ## Soluciones aplicadas
 
@@ -177,6 +188,8 @@ Prompts relevantes usados por el usuario:
 - Registrar en este documento la ruta real del PDF usado como contexto del reto.
 - Agregar sección “Ejecución local con Docker” al plan técnico.
 - Crear `README.md` con comandos previstos de Docker Compose, Prisma, lint y build.
+- Crear los archivos de bootstrap de Next.js y Docker de Fase 1.
+- Validar al menos la sintaxis JSON de `package.json`; la verificación completa con Docker queda bloqueada hasta habilitar integración WSL en Docker Desktop.
 
 ## Mejoras futuras
 

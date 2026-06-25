@@ -4,7 +4,7 @@ Portal web del Reto AI-First Fase 1 para explorar convocatorias públicas colomb
 
 ## Estado actual
 
-El repositorio está en fase de planificación técnica. Aún no se ha implementado código de aplicación.
+El repositorio tiene completada la Fase 1 del plan técnico: bootstrap de Next.js con TypeScript y entorno de ejecución local con Docker Compose.
 
 Plan técnico principal:
 
@@ -30,7 +30,7 @@ El proyecto debe poder levantarse localmente sin instalar Node.js ni PostgreSQL 
 - `app`: aplicación Next.js construida desde `Dockerfile.dev` y expuesta en `http://localhost:3000`.
 - `db`: PostgreSQL accesible internamente para la app como `db:5432`.
 
-### Archivos de infraestructura a crear durante la implementación
+### Archivos de infraestructura incluidos
 
 - `docker-compose.yml`
 - `Dockerfile.dev`
@@ -42,10 +42,10 @@ El proyecto debe poder levantarse localmente sin instalar Node.js ni PostgreSQL 
 Dentro del contenedor `app`, Prisma debe usar el host `db`, no `localhost`:
 
 ```env
-DATABASE_URL="postgresql://postgres:<dev-password>@db:5432/portal_convocatorias?schema=public"
+DATABASE_URL="postgresql://postgres:<POSTGRES_PASSWORD>@db:5432/portal_convocatorias?schema=public"
 ```
 
-La contraseña de desarrollo se definirá en `docker-compose.yml` y `.env.example` sin usar secretos reales de producción.
+Antes de levantar el entorno, copia `.env.example` a `.env` y reemplaza los placeholders con valores locales. No commits el archivo `.env`.
 
 ### Comandos previstos
 
