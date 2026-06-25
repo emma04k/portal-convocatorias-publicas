@@ -14,9 +14,10 @@ El objetivo del proyecto es construir un portal web para publicar, consultar y a
 
 ## Repositorio
 
-- Repositorio: pendiente de URL remota configurada en Git.
+- Repositorio: https://github.com/emma04k/portal-convocatorias-publicas
 - Rama actual al crear este documento: `main`.
 - Estado inicial observado: repositorio sin commits todavía; `AGENTS.md` y este `SOUL.md` son archivos nuevos.
+- Publicación en GitHub: repositorio público creado con `gh CLI`, remoto `origin` configurado y rama `main` publicada.
 
 ## Stack técnico definido
 
