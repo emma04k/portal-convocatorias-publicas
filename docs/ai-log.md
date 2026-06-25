@@ -23,3 +23,15 @@
 - Se creó `lib/db/prisma.ts` como Prisma Client singleton para reutilizar conexión en desarrollo.
 - La migración inicial fue generada y aplicada mediante Prisma dentro de Docker: `20260625174451_init_data_model`.
 - Verificación realizada dentro de Docker: `npx prisma validate`, `npx prisma migrate dev --name init_data_model`, `npx prisma generate`, `npm run lint` y `npm run build` pasaron correctamente.
+
+## Fase 3 — Autenticación JWT con bcrypt y Zod
+
+- Se continuó con la siguiente fase pendiente del plan técnico: Fase 3 — Autenticación JWT con bcrypt y Zod.
+- Se aplicó TDD: primero se agregaron pruebas para validadores, helpers JWT y rutas de auth; la primera ejecución de `npm test` falló por módulos de auth inexistentes, confirmando RED.
+- Se agregó Vitest como infraestructura de pruebas y el script `npm test`.
+- Se crearon validadores Zod para registro y login, normalizando emails y rechazando passwords débiles.
+- Se crearon helpers de bcrypt, JWT y sesión/cookies HTTP-only.
+- Se implementaron `POST /api/auth/register`, `POST /api/auth/login`, `POST /api/auth/logout` y `GET /api/auth/me` con manejo de errores y sin exponer `passwordHash`.
+- Se marcaron las rutas de auth como dinámicas para evitar prerender estático durante `next build`.
+- Verificación Docker realizada: `npm test` pasó con 10 tests, `npm run lint` pasó sin errores y `npm run build` pasó correctamente.
+- Revisión de seguridad: `npm audit --audit-level=high` reporta vulnerabilidades transitivas pendientes en Next.js/eslint-config-next y bcrypt que requieren upgrades mayores (`next@16`, `eslint-config-next@16`, `bcrypt@6`) y se dejan como hardening pendiente para no mezclar cambios breaking sin una fase dedicada.

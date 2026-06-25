@@ -126,6 +126,13 @@ Hasta el momento de creación de este documento se construyó la base documental
    - Se creó `lib/db/prisma.ts` como singleton de Prisma Client para el runtime de Next.js.
    - Se verificó dentro de Docker: `prisma validate`, `prisma migrate dev`, `prisma generate`, `npm run lint` y `npm run build`.
 
+8. Fase 3 — Autenticación JWT con bcrypt y Zod
+   - Se implementó autenticación REST con `POST /api/auth/register`, `POST /api/auth/login`, `POST /api/auth/logout` y `GET /api/auth/me`.
+   - Se validan inputs con Zod, se hashean passwords con bcrypt y se firma JWT en cookie HTTP-only `SameSite=Strict`.
+   - Las respuestas de usuario omiten `passwordHash` y los endpoints manejan errores de validación, credenciales inválidas, duplicados y errores internos.
+   - Se agregó Vitest y pruebas TDD para validadores, JWT y rutas de auth; la validación final en Docker pasó con 10 tests, lint y build.
+   - Se ejecutó `npm audit --audit-level=high`; quedan vulnerabilidades transitivas en Next.js/eslint-config-next y bcrypt que requieren upgrades mayores y deben tratarse como hardening controlado.
+
 ## Cómo se usó Hermes
 
 Hermes se utilizó como agente de desarrollo dentro del repositorio para:
@@ -189,6 +196,7 @@ Prompts relevantes usados por el usuario:
 - La ruta solicitada `docs/context/reto-ai-first-fase1.pdf` no existe; el PDF disponible y leído fue `docs/context/2a-reto-ai-first-fase1.pdf`.
 - El bloqueo vigente de Docker cambió durante la implementación: la integración Docker/WSL ya estaba disponible, pero `docker compose config` fallaba porque faltaba un `.env` local con `DATABASE_URL` y `POSTGRES_PASSWORD`.
 - Durante la validación aparecieron dos bloqueos adicionales ya resueltos: `npm install` dentro de Docker tardaba demasiado sin lockfile reproducible, y Prisma en Alpine necesitaba OpenSSL para ejecutar migraciones.
+- `npm audit --audit-level=high` reporta vulnerabilidades que no se corrigen con `npm audit fix` sin cambios mayores; resolverlas requiere evaluar upgrades breaking de Next.js, eslint-config-next y bcrypt.
 
 ## Soluciones aplicadas
 
@@ -207,6 +215,8 @@ Prompts relevantes usados por el usuario:
 - Remover `NODE_ENV: development` de Compose para que `next build` use el entorno correcto.
 - Validar Docker con flujo no bloqueante y cerrar contenedores con `docker compose down`.
 - Configurar Prisma, generar la migración inicial y validar el modelo de datos PostgreSQL.
+- Implementar autenticación con JWT, bcrypt, Zod y cookies HTTP-only.
+- Agregar pruebas automatizadas de autenticación con Vitest y ejecutarlas dentro de Docker.
 
 ## Mejoras futuras
 

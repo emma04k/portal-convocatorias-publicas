@@ -80,6 +80,23 @@ Ejecutar build:
 docker compose exec app npm run build
 ```
 
+Ejecutar pruebas automatizadas:
+
+```bash
+docker compose exec app npm test
+```
+
+## API de autenticación
+
+La Fase 3 agrega endpoints REST de autenticación con JWT en cookie HTTP-only:
+
+- `POST /api/auth/register`
+- `POST /api/auth/login`
+- `POST /api/auth/logout`
+- `GET /api/auth/me`
+
+El entorno local requiere `JWT_SECRET` en `.env`. Usa `.env.example` como referencia y no commitees `.env`.
+
 ## Reglas de trabajo
 
 - No escribir código manualmente fuera de Hermes/Codex.
