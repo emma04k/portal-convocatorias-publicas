@@ -32,7 +32,7 @@ body {
 
 .content-shell {
   margin: 0 auto;
-  max-width: 1080px;
+  max-width: 1200px;
   padding: 2rem;
 }
 
@@ -223,16 +223,16 @@ p {
 
 .filters-form {
   display: grid;
-  gap: 1rem;
+  gap: 1.5rem;
   grid-template-columns: 1fr;
   margin-top: 1.5rem;
 }
 
 .filters-fields {
   display: grid;
-  column-gap: 1.5rem;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  row-gap: 1rem;
+  gap: 1.25rem 1.75rem;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  width: 100%;
 }
 
 .filters-form label,
@@ -241,13 +241,17 @@ p {
   display: grid;
   font-weight: 700;
   gap: 0.5rem;
+  min-width: 0;
 }
 
 .filters-form input {
   border: 1px solid var(--border);
   border-radius: 14px;
+  box-sizing: border-box;
   font: inherit;
+  min-width: 0;
   padding: 0.85rem 1rem;
+  width: 100%;
 }
 
 .form-actions,
@@ -261,6 +265,7 @@ p {
 
 .form-actions {
   align-self: end;
+  gap: 1rem;
   grid-column: 1 / -1;
 }
 
@@ -353,6 +358,12 @@ p {
   color: var(--muted);
   font-weight: 700;
   margin: 0.75rem 0 0;
+}
+
+@media (max-width: 900px) {
+  .filters-fields {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 760px) {
