@@ -122,3 +122,9 @@
 - Se agregaron mensajes de estado dedicados para confirmar cuando los datos del perfil se actualizan correctamente y cuando la contraseña se cambia correctamente.
 - Los mensajes usan `role="status"` y `aria-live="polite"` para que el feedback sea visible y accesible junto a cada formulario.
 - Se agregó prueba de regresión para cubrir los mensajes de éxito del perfil y la contraseña.
+
+## Ajuste UI — CTA de landing según autenticación
+
+- Se ajustó la raíz del portal para leer la cookie de autenticación y ocultar `Iniciar sesión` y `Crear cuenta` cuando el usuario ya está autenticado.
+- Para usuarios autenticados, la landing mantiene `Explorar convocatorias` y muestra un acceso directo a `Ir a mi perfil`.
+- Se agregó prueba de regresión para cubrir el branch autenticado de la landing.

@@ -1,6 +1,10 @@
 import Link from "next/link";
+import { cookies } from "next/headers";
+import { AUTH_COOKIE_NAME } from "@/lib/auth/session";
 
 export default function HomePage() {
+  const isAuthenticated = Boolean(cookies().get(AUTH_COOKIE_NAME)?.value);
+
   return (
     <main className="page-shell">
       <section className="hero-card hero-card-wide">
@@ -12,8 +16,14 @@ export default function HomePage() {
         </p>
         <div className="hero-actions">
           <Link className="button-primary" href="/convocatorias">Explorar convocatorias</Link>
-          <Link className="button-secondary" href="/auth/register">Crear cuenta</Link>
-          <Link className="button-ghost" href="/auth/login">Iniciar sesión</Link>
+          {!isAuthenticated ? (
+            <>
+              <Link className="button-secondary" href="/auth/register">Crear cuenta</Link>
+              <Link className="button-ghost" href="/auth/login">Iniciar sesión</Link>
+            </>
+          ) : (
+            <Link className="button-secondary" href="/profile">Ir a mi perfil</Link>
+          )}
         </div>
       </section>
     </main>

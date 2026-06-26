@@ -18,6 +18,16 @@ describe("auth and landing pages", () => {
     expect(source).toContain("Iniciar sesión");
   });
 
+  it("hides landing login and register calls to action when the user is authenticated", () => {
+    const source = readRepoFile("app/page.tsx");
+
+    expect(source).toContain("cookies()");
+    expect(source).toContain("AUTH_COOKIE_NAME");
+    expect(source).toContain("isAuthenticated");
+    expect(source).toContain("{!isAuthenticated ? (");
+    expect(source).toContain("Ir a mi perfil");
+  });
+
   it("renders login form wired to the auth API", () => {
     const page = readRepoFile("app/auth/login/page.tsx");
     const form = readRepoFile("components/auth/auth-form.tsx");
