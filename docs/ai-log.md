@@ -141,3 +141,10 @@
 - Se corrigió la página de convocatorias para recibir los `searchParams` de la URL y pasarlos como filtros iniciales al navegador de convocatorias.
 - Al ejecutar una búsqueda guardada desde `/saved-searches`, los parámetros `q`, `entity`, `status`, `dateFrom` y `dateTo` ahora se aplican al cargar `/convocatorias`.
 - Se agregó prueba de regresión para cubrir el flujo de abrir una búsqueda guardada y aplicar sus filtros iniciales.
+
+## Ajuste UI — Limpieza de filtros de búsqueda
+
+- Se agregó el botón `Limpiar filtros` en el formulario de convocatorias para restablecer texto libre, entidad, estado y rango de fechas.
+- Los campos del formulario de búsqueda ahora son controlados por estado para que la limpieza actualice inmediatamente los inputs visibles.
+- Al limpiar filtros también se reinicia la paginación y se remueve la query string de `/convocatorias` cuando venía desde una búsqueda guardada.
+- Se agregó prueba de regresión para cubrir la presencia del botón y el reseteo de filtros.

@@ -18,6 +18,9 @@ describe("calls browsing UI", () => {
     expect(browser).toContain("name=\"status\"");
     expect(browser).toContain("name=\"dateFrom\"");
     expect(browser).toContain("name=\"dateTo\"");
+    expect(browser).toContain("Limpiar filtros");
+    expect(browser).toContain("handleClearFilters");
+    expect(browser).toContain("setFilters(INITIAL_FILTERS)");
     expect(browser).toContain("Guardar búsqueda");
     expect(browser).toContain("Siguiente");
     expect(card).toContain("Guardar favorito");

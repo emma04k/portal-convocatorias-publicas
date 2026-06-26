@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useEffect, useMemo, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useMemo, useState } from "react";
 import { ConvocatoriaCard } from "@/components/convocatorias/convocatoria-card";
 import type { Convocatoria, ConvocatoriaListResult } from "@/lib/secop/types";
 
@@ -104,6 +104,19 @@ export function ConvocatoriasBrowser({ initialFilters }: ConvocatoriasBrowserPro
     setOffset(0);
   }
 
+  function handleFilterChange(event: ChangeEvent<HTMLInputElement>) {
+    const { name, value } = event.currentTarget;
+    setFilters((current) => ({ ...current, [name]: value }));
+  }
+
+  function handleClearFilters() {
+    setFilters(INITIAL_FILTERS);
+    setOffset(0);
+    if (typeof window !== "undefined") {
+      window.history.replaceState(null, "", "/convocatorias");
+    }
+  }
+
   async function saveBookmark(convocatoria: Convocatoria) {
     const response = await fetch("/api/bookmarks", {
       method: "POST",
@@ -149,26 +162,27 @@ export function ConvocatoriasBrowser({ initialFilters }: ConvocatoriasBrowserPro
         <form className="filters-form" onSubmit={handleSubmit}>
           <label>
             Texto libre
-            <input defaultValue={filters.q} name="q" placeholder="Objeto, código o palabra clave" type="search" />
+            <input name="q" onChange={handleFilterChange} placeholder="Objeto, código o palabra clave" type="search" value={filters.q} />
           </label>
           <label>
             Entidad
-            <input defaultValue={filters.entity} name="entity" placeholder="Ej. DANE" type="text" />
+            <input name="entity" onChange={handleFilterChange} placeholder="Ej. DANE" type="text" value={filters.entity} />
           </label>
           <label>
             Estado
-            <input defaultValue={filters.status} name="status" placeholder="Ej. Presentación de oferta" type="text" />
+            <input name="status" onChange={handleFilterChange} placeholder="Ej. Presentación de oferta" type="text" value={filters.status} />
           </label>
           <label>
             Desde
-            <input defaultValue={filters.dateFrom} name="dateFrom" type="date" />
+            <input name="dateFrom" onChange={handleFilterChange} type="date" value={filters.dateFrom} />
           </label>
           <label>
             Hasta
-            <input defaultValue={filters.dateTo} name="dateTo" type="date" />
+            <input name="dateTo" onChange={handleFilterChange} type="date" value={filters.dateTo} />
           </label>
           <div className="form-actions">
             <button className="button-primary" type="submit">Buscar</button>
+            <button className="button-secondary" onClick={handleClearFilters} type="button">Limpiar filtros</button>
             <button className="button-secondary" onClick={saveSearch} type="button">Guardar búsqueda</button>
           </div>
         </form>
