@@ -116,3 +116,9 @@
 
 - Se corrigió el formulario de cambio de contraseña para conservar la referencia al formulario antes del `await` de `fetch`, evitando el error `Cannot read properties of null (reading 'reset')` cuando la contraseña sí se actualiza correctamente.
 - Se agregó prueba de regresión para asegurar que el reset usa la referencia estable del formulario y no `event.currentTarget` después de operaciones asíncronas.
+
+## Ajuste UI — Mensajes de éxito en perfil
+
+- Se agregaron mensajes de estado dedicados para confirmar cuando los datos del perfil se actualizan correctamente y cuando la contraseña se cambia correctamente.
+- Los mensajes usan `role="status"` y `aria-live="polite"` para que el feedback sea visible y accesible junto a cada formulario.
+- Se agregó prueba de regresión para cubrir los mensajes de éxito del perfil y la contraseña.

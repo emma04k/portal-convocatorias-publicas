@@ -29,6 +29,16 @@ describe("profile and demo documentation", () => {
     expect(profile).not.toContain("event.currentTarget.reset();");
   });
 
+  it("shows dedicated success messages after updating profile data and password", () => {
+    const profile = read("components/profile/profile-manager.tsx");
+
+    expect(profile).toContain("accountMessage");
+    expect(profile).toContain("passwordMessage");
+    expect(profile).toContain("Tus datos de perfil se actualizaron correctamente.");
+    expect(profile).toContain("Tu contraseña se actualizó correctamente.");
+    expect(profile).toContain("aria-live=\"polite\"");
+  });
+
   it("documents the end-to-end demo flow and security checklist", () => {
     const readme = read("README.md");
 

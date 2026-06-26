@@ -17,6 +17,8 @@ type Profile = {
 export function ProfileManager() {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [message, setMessage] = useState<string | null>(null);
+  const [accountMessage, setAccountMessage] = useState<string | null>(null);
+  const [passwordMessage, setPasswordMessage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   async function loadProfile() {
@@ -50,11 +52,12 @@ export function ProfileManager() {
     });
 
     if (!response.ok) {
-      setMessage("No fue posible actualizar tu cuenta.");
+      setAccountMessage("No fue posible actualizar tu cuenta.");
       return;
     }
 
-    setMessage("Perfil actualizado.");
+    setMessage(null);
+    setAccountMessage("Tus datos de perfil se actualizaron correctamente.");
     await loadProfile();
   }
 
@@ -71,7 +74,10 @@ export function ProfileManager() {
       }),
     });
 
-    setMessage(response.ok ? "Contraseña actualizada." : "No fue posible cambiar la contraseña.");
+    setMessage(null);
+    setPasswordMessage(
+      response.ok ? "Tu contraseña se actualizó correctamente." : "No fue posible cambiar la contraseña.",
+    );
     if (response.ok) {
       passwordForm.reset();
     }
@@ -120,6 +126,11 @@ export function ProfileManager() {
             </label>
             <button type="submit">Actualizar perfil</button>
           </form>
+          {accountMessage ? (
+            <p className="form-message" role="status" aria-live="polite">
+              {accountMessage}
+            </p>
+          ) : null}
         </section>
 
         <section className="content-card">
@@ -135,6 +146,11 @@ export function ProfileManager() {
             </label>
             <button type="submit">Cambiar contraseña</button>
           </form>
+          {passwordMessage ? (
+            <p className="form-message" role="status" aria-live="polite">
+              {passwordMessage}
+            </p>
+          ) : null}
         </section>
       </div>
     </section>
