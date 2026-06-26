@@ -111,3 +111,8 @@
 - Usuario autenticado: muestra `Convocatorias`, `Favoritos`, `Búsquedas`, `Perfil` y `Cerrar sesión`; oculta `Iniciar sesión` y `Crear cuenta`.
 - Se agregó prueba TDD para cubrir el branch de navegación basado en `cookies()` y `AUTH_COOKIE_NAME`.
 - Verificación Docker realizada: `npm test` pasó con 52 tests, `npm run lint` pasó sin errores y `npm run build` pasó correctamente.
+
+## Ajuste UI — Cambio de contraseña en perfil
+
+- Se corrigió el formulario de cambio de contraseña para conservar la referencia al formulario antes del `await` de `fetch`, evitando el error `Cannot read properties of null (reading 'reset')` cuando la contraseña sí se actualiza correctamente.
+- Se agregó prueba de regresión para asegurar que el reset usa la referencia estable del formulario y no `event.currentTarget` después de operaciones asíncronas.

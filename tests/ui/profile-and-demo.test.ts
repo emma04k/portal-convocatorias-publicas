@@ -20,6 +20,15 @@ describe("profile and demo documentation", () => {
     expect(profile).toContain("Búsquedas guardadas");
   });
 
+  it("keeps the password form reference before awaiting the password update", () => {
+    const profile = read("components/profile/profile-manager.tsx");
+
+    expect(profile).toContain("const passwordForm = event.currentTarget;");
+    expect(profile).toContain("const formData = new FormData(passwordForm);");
+    expect(profile).toContain("passwordForm.reset();");
+    expect(profile).not.toContain("event.currentTarget.reset();");
+  });
+
   it("documents the end-to-end demo flow and security checklist", () => {
     const readme = read("README.md");
 

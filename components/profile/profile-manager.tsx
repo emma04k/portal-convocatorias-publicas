@@ -60,7 +60,8 @@ export function ProfileManager() {
 
   async function updatePassword(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const formData = new FormData(event.currentTarget);
+    const passwordForm = event.currentTarget;
+    const formData = new FormData(passwordForm);
     const response = await fetch("/api/profile", {
       method: "PATCH",
       headers: { "content-type": "application/json" },
@@ -72,7 +73,7 @@ export function ProfileManager() {
 
     setMessage(response.ok ? "Contraseña actualizada." : "No fue posible cambiar la contraseña.");
     if (response.ok) {
-      event.currentTarget.reset();
+      passwordForm.reset();
     }
   }
 
