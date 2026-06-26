@@ -10,8 +10,20 @@ function escapeSoqlLiteral(value: string): string {
   return value.replace(/'/g, "''");
 }
 
-function buildDateWhere(filters: Pick<ConvocatoriaQuery, "dateFrom" | "dateTo">): string | null {
+function buildContainsClause(column: string, value: string): string {
+  return `lower(${column}) like '%${escapeSoqlLiteral(value.toLowerCase())}%'`;
+}
+
+function buildWhere(filters: Pick<ConvocatoriaQuery, "entity" | "status" | "dateFrom" | "dateTo">): string | null {
   const clauses: string[] = [];
+
+  if (filters.entity) {
+    clauses.push(buildContainsClause("entidad", filters.entity));
+  }
+
+  if (filters.status) {
+    clauses.push(buildContainsClause("estado_resumen", filters.status));
+  }
 
   if (filters.dateFrom) {
     clauses.push(`fecha_de_publicacion_del >= '${filters.dateFrom}T00:00:00'`);
@@ -52,17 +64,9 @@ export async function fetchConvocatorias(
     url.searchParams.set("$q", filters.q);
   }
 
-  if (filters.entity) {
-    url.searchParams.set("entidad", filters.entity);
-  }
-
-  if (filters.status) {
-    url.searchParams.set("estado_resumen", filters.status);
-  }
-
-  const dateWhere = buildDateWhere(filters);
-  if (dateWhere) {
-    url.searchParams.set("$where", dateWhere);
+  const where = buildWhere(filters);
+  if (where) {
+    url.searchParams.set("$where", where);
   }
 
   const records = await requestSecopRecords(url, fetcher);

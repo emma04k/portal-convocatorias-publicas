@@ -128,3 +128,10 @@
 - Se ajustó la raíz del portal para leer la cookie de autenticación y ocultar `Iniciar sesión` y `Crear cuenta` cuando el usuario ya está autenticado.
 - Para usuarios autenticados, la landing mantiene `Explorar convocatorias` y muestra un acceso directo a `Ir a mi perfil`.
 - Se agregó prueba de regresión para cubrir el branch autenticado de la landing.
+
+## Ajuste SECOP — Filtros flexibles por entidad y estado
+
+- Se cambió la consulta SECOP para que los filtros `entity` y `status` usen coincidencia parcial case-insensitive mediante `$where`, en lugar de parámetros de igualdad exacta.
+- El filtro de entidad ahora busca coincidencias dentro de `entidad` y el filtro de estado dentro de `estado_resumen`, combinándose con filtros de fecha cuando aplican.
+- Se agregaron pruebas de regresión para validar la construcción del `$where` flexible y el escape de literales SoQL.
+- Se verificó una consulta en vivo contra datos.gov.co con entidad parcial `dane` y estado parcial `presentación`, recibiendo respuesta `200`.

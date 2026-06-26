@@ -2,14 +2,22 @@ import { describe, expect, it, vi } from "vitest";
 import { fetchConvocatoriaByExternalId, fetchConvocatorias } from "@/lib/secop/client";
 
 describe("SECOP client", () => {
-  it("builds safe SODA parameters for filters and pagination", async () => {
+  it("builds safe SODA parameters with flexible entity and status filters", async () => {
     const fetchMock = vi.fn().mockResolvedValue({
       ok: true,
       json: async () => [],
     });
 
     await fetchConvocatorias(
-      { q: "salud", entity: "DANE", status: "Abierto", dateFrom: "2024-01-01", dateTo: "2024-12-31", limit: 10, offset: 5 },
+      {
+        q: "salud",
+        entity: "DANE",
+        status: "Presentación de oferta",
+        dateFrom: "2024-01-01",
+        dateTo: "2024-12-31",
+        limit: 10,
+        offset: 5,
+      },
       fetchMock,
     );
 
@@ -19,9 +27,28 @@ describe("SECOP client", () => {
     expect(url.searchParams.get("$offset")).toBe("5");
     expect(url.searchParams.get("$order")).toBe("fecha_de_publicacion_del DESC");
     expect(url.searchParams.get("$q")).toBe("salud");
-    expect(url.searchParams.get("entidad")).toBe("DANE");
-    expect(url.searchParams.get("estado_resumen")).toBe("Abierto");
-    expect(url.searchParams.get("$where")).toBe("fecha_de_publicacion_del >= '2024-01-01T00:00:00' AND fecha_de_publicacion_del <= '2024-12-31T23:59:59'");
+    expect(url.searchParams.get("entidad")).toBeNull();
+    expect(url.searchParams.get("estado_resumen")).toBeNull();
+    expect(url.searchParams.get("$where")).toBe(
+      "lower(entidad) like '%dane%' AND lower(estado_resumen) like '%presentación de oferta%' AND fecha_de_publicacion_del >= '2024-01-01T00:00:00' AND fecha_de_publicacion_del <= '2024-12-31T23:59:59'",
+    );
+  });
+
+  it("escapes flexible filter literals before building the SODA where clause", async () => {
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => [],
+    });
+
+    await fetchConvocatorias(
+      { entity: "O'Hara", status: "Adjudicación", limit: 20, offset: 0 },
+      fetchMock,
+    );
+
+    const url = new URL(fetchMock.mock.calls[0][0]);
+    expect(url.searchParams.get("$where")).toBe(
+      "lower(entidad) like '%o''hara%' AND lower(estado_resumen) like '%adjudicación%'",
+    );
   });
 
   it("normalizes records and surfaces controlled upstream failures", async () => {
