@@ -160,26 +160,28 @@ export function ConvocatoriasBrowser({ initialFilters }: ConvocatoriasBrowserPro
         <p className="eyebrow">SECOP II / datos.gov.co</p>
         <h1 id="convocatorias-title">Explorar convocatorias</h1>
         <form className="filters-form" onSubmit={handleSubmit}>
-          <label>
-            Texto libre
-            <input name="q" onChange={handleFilterChange} placeholder="Objeto, código o palabra clave" type="search" value={filters.q} />
-          </label>
-          <label>
-            Entidad
-            <input name="entity" onChange={handleFilterChange} placeholder="Ej. DANE" type="text" value={filters.entity} />
-          </label>
-          <label>
-            Estado
-            <input name="status" onChange={handleFilterChange} placeholder="Ej. Presentación de oferta" type="text" value={filters.status} />
-          </label>
-          <label>
-            Desde
-            <input name="dateFrom" onChange={handleFilterChange} type="date" value={filters.dateFrom} />
-          </label>
-          <label>
-            Hasta
-            <input name="dateTo" onChange={handleFilterChange} type="date" value={filters.dateTo} />
-          </label>
+          <div className="filters-fields">
+            <label>
+              Texto libre
+              <input name="q" onChange={handleFilterChange} placeholder="Objeto, código o palabra clave" type="search" value={filters.q} />
+            </label>
+            <label>
+              Entidad
+              <input name="entity" onChange={handleFilterChange} placeholder="Ej. DANE" type="text" value={filters.entity} />
+            </label>
+            <label>
+              Estado
+              <input name="status" onChange={handleFilterChange} placeholder="Ej. Presentación de oferta" type="text" value={filters.status} />
+            </label>
+            <label>
+              Desde
+              <input name="dateFrom" onChange={handleFilterChange} type="date" value={filters.dateFrom} />
+            </label>
+            <label>
+              Hasta
+              <input name="dateTo" onChange={handleFilterChange} type="date" value={filters.dateTo} />
+            </label>
+          </div>
           <div className="form-actions">
             <button className="button-primary" type="submit">Buscar</button>
             <button className="button-secondary" onClick={handleClearFilters} type="button">Limpiar filtros</button>

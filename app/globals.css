@@ -220,11 +220,18 @@ p {
 .filters-form {
   display: grid;
   gap: 1rem;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  grid-template-columns: 1fr;
   margin-top: 1.5rem;
 }
 
-.filters-form label {
+.filters-fields {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.filters-form label,
+.filters-fields label {
   color: var(--foreground);
   display: grid;
   font-weight: 700;
@@ -249,6 +256,7 @@ p {
 
 .form-actions {
   align-self: end;
+  grid-column: 1 / -1;
 }
 
 .form-message {
@@ -352,5 +360,9 @@ p {
   .content-card,
   .auth-card {
     padding: 1.5rem;
+  }
+
+  .filters-fields {
+    grid-template-columns: 1fr;
   }
 }

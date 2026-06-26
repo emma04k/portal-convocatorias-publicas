@@ -13,6 +13,8 @@ describe("calls browsing UI", () => {
 
     expect(page).toContain("ConvocatoriasBrowser");
     expect(browser).toContain("/api/convocatorias");
+    expect(browser).toContain("filters-fields");
+    expect(browser).toContain("form-actions");
     expect(browser).toContain("name=\"q\"");
     expect(browser).toContain("name=\"entity\"");
     expect(browser).toContain("name=\"status\"");
@@ -26,6 +28,11 @@ describe("calls browsing UI", () => {
     expect(card).toContain("Guardar favorito");
     expect(browser).toContain("/api/bookmarks");
     expect(card).toContain("/convocatorias/");
+
+    const styles = read("app/globals.css");
+    expect(styles).toContain(".filters-fields");
+    expect(styles).toContain("grid-template-columns: repeat(5, minmax(0, 1fr));");
+    expect(styles).toContain("grid-column: 1 / -1;");
   });
 
   it("applies saved search query parameters when opening the convocatorias browser", () => {

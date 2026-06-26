@@ -148,3 +148,9 @@
 - Los campos del formulario de búsqueda ahora son controlados por estado para que la limpieza actualice inmediatamente los inputs visibles.
 - Al limpiar filtros también se reinicia la paginación y se remueve la query string de `/convocatorias` cuando venía desde una búsqueda guardada.
 - Se agregó prueba de regresión para cubrir la presencia del botón y el reseteo de filtros.
+
+## Ajuste UI — Layout de filtros de convocatorias
+
+- Se reorganizó el formulario de filtros de convocatorias para separar los campos y las acciones en dos filas: una fila de campos y una fila de botones.
+- La fila de campos usa una grilla de cinco columnas en escritorio y se apila en una columna en pantallas pequeñas.
+- Se agregó prueba de regresión para cubrir la estructura de filas y estilos del layout.
