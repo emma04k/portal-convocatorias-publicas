@@ -4,7 +4,7 @@ import { FormEvent, useEffect, useMemo, useState } from "react";
 import { ConvocatoriaCard } from "@/components/convocatorias/convocatoria-card";
 import type { Convocatoria, ConvocatoriaListResult } from "@/lib/secop/types";
 
-type Filters = {
+export type Filters = {
   q: string;
   entity: string;
   status: string;
@@ -22,6 +22,16 @@ const INITIAL_FILTERS: Filters = {
 
 const PAGE_SIZE = 12;
 
+function normalizeInitialFilters(initialFilters?: Partial<Filters>): Filters {
+  return {
+    q: initialFilters?.q ?? "",
+    entity: initialFilters?.entity ?? "",
+    status: initialFilters?.status ?? "",
+    dateFrom: initialFilters?.dateFrom ?? "",
+    dateTo: initialFilters?.dateTo ?? "",
+  };
+}
+
 function toQuery(filters: Filters, offset: number) {
   const params = new URLSearchParams({ limit: String(PAGE_SIZE), offset: String(offset) });
 
@@ -34,8 +44,12 @@ function toQuery(filters: Filters, offset: number) {
   return params;
 }
 
-export function ConvocatoriasBrowser() {
-  const [filters, setFilters] = useState<Filters>(INITIAL_FILTERS);
+type ConvocatoriasBrowserProps = {
+  initialFilters?: Partial<Filters>;
+};
+
+export function ConvocatoriasBrowser({ initialFilters }: ConvocatoriasBrowserProps) {
+  const [filters, setFilters] = useState<Filters>(() => normalizeInitialFilters(initialFilters));
   const [offset, setOffset] = useState(0);
   const [items, setItems] = useState<Convocatoria[]>([]);
   const [isLoading, setIsLoading] = useState(true);

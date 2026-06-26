@@ -135,3 +135,9 @@
 - El filtro de entidad ahora busca coincidencias dentro de `entidad` y el filtro de estado dentro de `estado_resumen`, combinándose con filtros de fecha cuando aplican.
 - Se agregaron pruebas de regresión para validar la construcción del `$where` flexible y el escape de literales SoQL.
 - Se verificó una consulta en vivo contra datos.gov.co con entidad parcial `dane` y estado parcial `presentación`, recibiendo respuesta `200`.
+
+## Ajuste UI — Aplicación de búsquedas guardadas
+
+- Se corrigió la página de convocatorias para recibir los `searchParams` de la URL y pasarlos como filtros iniciales al navegador de convocatorias.
+- Al ejecutar una búsqueda guardada desde `/saved-searches`, los parámetros `q`, `entity`, `status`, `dateFrom` y `dateTo` ahora se aplican al cargar `/convocatorias`.
+- Se agregó prueba de regresión para cubrir el flujo de abrir una búsqueda guardada y aplicar sus filtros iniciales.

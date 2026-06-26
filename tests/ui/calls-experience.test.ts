@@ -25,6 +25,19 @@ describe("calls browsing UI", () => {
     expect(card).toContain("/convocatorias/");
   });
 
+  it("applies saved search query parameters when opening the convocatorias browser", () => {
+    const page = read("app/convocatorias/page.tsx");
+    const browser = read("components/convocatorias/convocatorias-browser.tsx");
+    const savedSearches = read("components/saved-searches/saved-searches-manager.tsx");
+
+    expect(savedSearches).toContain("/convocatorias?");
+    expect(page).toContain("searchParams");
+    expect(page).toContain("initialFilters");
+    expect(browser).toContain("initialFilters");
+    expect(browser).toContain("normalizeInitialFilters");
+    expect(browser).toContain("useState<Filters>(() => normalizeInitialFilters(initialFilters))");
+  });
+
   it("renders a detail page that can save a convocatoria as bookmark", () => {
     const page = read("app/convocatorias/[externalId]/page.tsx");
     const detail = read("components/convocatorias/convocatoria-detail.tsx");
