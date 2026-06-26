@@ -154,3 +154,4 @@
 - Se reorganizó el formulario de filtros de convocatorias para separar los campos y las acciones en dos filas: una fila de campos y una fila de botones.
 - La fila de campos usa una grilla de cinco columnas en escritorio y se apila en una columna en pantallas pequeñas.
 - Se agregó prueba de regresión para cubrir la estructura de filas y estilos del layout.
+- Se amplió el ancho útil de la tarjeta de contenido y se aumentó la separación horizontal entre los inputs para mejorar la lectura visual del formulario.

@@ -107,6 +107,10 @@ body {
   width: min(100%, 920px);
 }
 
+.content-shell .content-card {
+  width: 100%;
+}
+
 .content-card,
 .auth-card {
   border: 1px solid var(--border);
@@ -226,8 +230,9 @@ p {
 
 .filters-fields {
   display: grid;
-  gap: 1rem;
+  column-gap: 1.5rem;
   grid-template-columns: repeat(5, minmax(0, 1fr));
+  row-gap: 1rem;
 }
 
 .filters-form label,

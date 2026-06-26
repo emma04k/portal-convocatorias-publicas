@@ -31,6 +31,8 @@ describe("calls browsing UI", () => {
 
     const styles = read("app/globals.css");
     expect(styles).toContain(".filters-fields");
+    expect(styles).toContain(".content-shell .content-card");
+    expect(styles).toContain("column-gap: 1.5rem;");
     expect(styles).toContain("grid-template-columns: repeat(5, minmax(0, 1fr));");
     expect(styles).toContain("grid-column: 1 / -1;");
   });
