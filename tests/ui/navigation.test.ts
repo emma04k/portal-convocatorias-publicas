@@ -14,4 +14,14 @@ describe("site navigation", () => {
     expect(source).toContain("href=\"/auth/login\"");
     expect(source).toContain("href=\"/auth/register\"");
   });
+
+  it("renders navigation groups based on auth cookie presence", () => {
+    expect(source).toContain("cookies()");
+    expect(source).toContain("AUTH_COOKIE_NAME");
+    expect(source).toContain("isAuthenticated");
+    expect(source).toContain("{isAuthenticated ? (");
+    expect(source).toContain("LogoutButton");
+    expect(source).toContain("/auth/login");
+    expect(source).toContain("/auth/register");
+  });
 });

@@ -103,3 +103,11 @@
 - Revisión de seguridad básica: `.env` no está versionado; `.env.example` sí; no se encontraron secretos reales en el árbol versionable, solo secretos sintéticos de tests/placeholders.
 - Verificación Docker realizada: `npm test` pasó con 51 tests, `npm run lint` pasó sin errores y `npm run build` pasó correctamente.
 - `npm audit --audit-level=high` sigue reportando vulnerabilidades en Next.js/eslint-config-next/bcrypt transitivas; `npm audit fix --force` propone upgrades breaking y queda documentado para evaluación explícita posterior.
+
+## Ajuste UI — Navegación consciente de autenticación
+
+- Se corrigió la navegación global para mostrar enlaces según presencia de cookie `auth_token`.
+- Usuario no autenticado: muestra `Convocatorias`, `Iniciar sesión` y `Crear cuenta`; oculta `Favoritos`, `Búsquedas`, `Perfil` y `Cerrar sesión`.
+- Usuario autenticado: muestra `Convocatorias`, `Favoritos`, `Búsquedas`, `Perfil` y `Cerrar sesión`; oculta `Iniciar sesión` y `Crear cuenta`.
+- Se agregó prueba TDD para cubrir el branch de navegación basado en `cookies()` y `AUTH_COOKIE_NAME`.
+- Verificación Docker realizada: `npm test` pasó con 52 tests, `npm run lint` pasó sin errores y `npm run build` pasó correctamente.
