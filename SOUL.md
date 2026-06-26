@@ -80,7 +80,7 @@ Este documento toma como fuente de reglas el archivo `AGENTS.md` en la raíz del
 - No modificar migraciones manualmente.
 - Todo endpoint debe tener manejo de errores.
 - Todo cambio importante debe actualizar `SOUL.md` o `docs/ai-log.md`.
-- Usar conventional commits en español o inglés.
+- Usar conventional commits siempre en inglés; no usar mensajes de commit en español.
 - Después de cada fase implementada, Hermes debe revisar `git status`, proponer un commit y pedir aprobación explícita antes de ejecutarlo.
 
 ## Qué se construyó hasta ahora
@@ -220,6 +220,7 @@ Prompts relevantes usados por el usuario:
 - Marcar el enlace del repositorio como pendiente porque no hay URL remota configurada actualmente en Git.
 - Mantener este archivo como documentación viva, actualizable durante el desarrollo.
 - Formalizar un workflow de commits con aprobación humana explícita antes de cada commit, manteniendo trazabilidad sin hacer push desde Hermes.
+- Aclarar que todos los mensajes de commit deben estar en inglés para evitar ambigüedad en futuras fases o mantenimientos.
 - Planificar una implementación incremental por fases para priorizar el flujo end-to-end exigido por el reto: auth, browse de convocatorias desde datos.gov.co y bookmarks persistidos.
 - Usar PostgreSQL como base de datos objetivo del proyecto, aunque el reto permitía PostgreSQL o SQLite, porque `AGENTS.md` fija PostgreSQL como stack del repositorio.
 - Usar Docker Compose como forma oficial de desarrollo local para evitar instalar Node.js y PostgreSQL directamente en WSL.

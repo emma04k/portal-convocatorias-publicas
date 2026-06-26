@@ -43,13 +43,13 @@ Este repositorio contiene el Portal de Convocatorias Públicas del Reto AI-First
 
 ## Commits
 
-Usar conventional commits en español o inglés.
+Usar siempre conventional commits en inglés. No usar mensajes de commit en español.
 
 Ejemplos:
 
 - `feat(auth): add JWT login`
-- `fix(api): manejar errores de validación`
-- `docs(ai): actualizar ai-log del reto`
+- `fix(api): handle validation errors`
+- `docs(ai): update challenge ai log`
 
 ## Workflow de commits
 
