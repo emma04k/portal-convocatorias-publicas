@@ -156,3 +156,10 @@
 - Se agregó prueba de regresión para cubrir la estructura de filas y estilos del layout.
 - Se amplió el ancho útil de la tarjeta de contenido y se aumentó la separación horizontal entre los inputs para mejorar la lectura visual del formulario.
 - Se refinó el layout responsive de filtros para evitar solapamientos: grilla con `minmax`, `gap` horizontal/vertical, inputs al 100%, `min-width: 0`, dos columnas en tablet y una columna en móvil.
+
+## Ajuste DX — Estilos globales en desarrollo
+
+- Se separaron los artefactos de Next.js para desarrollo y producción: `next dev` usa `.next-dev` y `next build/start` usan `.next-build`.
+- Esto evita que ejecutar `npm run build` dentro del contenedor de desarrollo sobrescriba el directorio usado por `next dev` y deje la pantalla inicial sin CSS global.
+- Se actualizaron `tsconfig.json` y `.gitignore` para reconocer e ignorar los nuevos directorios de salida de Next.js.
+- Se agregó prueba de regresión para asegurar que los scripts y `next.config.mjs` mantengan separados los artefactos.

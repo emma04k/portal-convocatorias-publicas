@@ -18,6 +18,20 @@ describe("auth and landing pages", () => {
     expect(source).toContain("Iniciar sesión");
   });
 
+  it("keeps development and production Next.js artifacts separate so global CSS is served", () => {
+    const packageJson = readRepoFile("package.json");
+    const nextConfig = readRepoFile("next.config.mjs");
+
+    expect(packageJson).toContain("NEXT_DIST_DIR=.next-dev next dev");
+    expect(packageJson).toContain("NEXT_DIST_DIR=.next-build next build");
+    expect(packageJson).toContain("NEXT_DIST_DIR=.next-build next start");
+    expect(nextConfig).toContain("distDir: process.env.NEXT_DIST_DIR");
+    expect(readRepoFile(".gitignore")).toContain(".next-build/");
+    expect(readRepoFile(".gitignore")).toContain(".next-dev/");
+    expect(readRepoFile("tsconfig.json")).toContain(".next-build/types/**/*.ts");
+    expect(readRepoFile("tsconfig.json")).toContain(".next-dev/types/**/*.ts");
+  });
+
   it("hides landing login and register calls to action when the user is authenticated", () => {
     const source = readRepoFile("app/page.tsx");
 
