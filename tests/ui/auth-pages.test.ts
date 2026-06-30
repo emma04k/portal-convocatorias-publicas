@@ -18,13 +18,14 @@ describe("auth and landing pages", () => {
     expect(source).toContain("Iniciar sesión");
   });
 
-  it("keeps development and production Next.js artifacts separate so global CSS is served", () => {
+  it("keeps development artifacts separate while preserving Vercel's default output directory", () => {
     const packageJson = readRepoFile("package.json");
     const nextConfig = readRepoFile("next.config.mjs");
 
     expect(packageJson).toContain("NEXT_DIST_DIR=.next-dev next dev");
-    expect(packageJson).toContain("NEXT_DIST_DIR=.next-build next build");
-    expect(packageJson).toContain("NEXT_DIST_DIR=.next-build next start");
+    expect(packageJson).toContain('"build": "next build"');
+    expect(packageJson).toContain('"start": "next start -H 0.0.0.0"');
+    expect(packageJson).not.toContain("NEXT_DIST_DIR=.next-build next build");
     expect(nextConfig).toContain("distDir: process.env.NEXT_DIST_DIR");
     expect(readRepoFile(".gitignore")).toContain(".next-build/");
     expect(readRepoFile(".gitignore")).toContain(".next-dev/");

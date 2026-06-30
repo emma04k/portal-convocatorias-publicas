@@ -171,3 +171,9 @@
 - Se agregó `db:deploy` como alias seguro para aplicar migraciones productivas con `prisma migrate deploy`.
 - Se ajustó `Dockerfile.dev` para copiar `prisma/` antes de `npm ci`, evitando que el `postinstall` falle dentro del build de Docker.
 - Se incorporó una prueba de regresión para cubrir los scripts de preparación de despliegue.
+
+## Corrección de despliegue — Salida estándar de Next.js en Vercel
+
+- Se corrigió el script `build` para que Vercel genere la salida estándar `.next` esperada por su runtime de Next.js.
+- `next dev` mantiene `NEXT_DIST_DIR=.next-dev` para evitar conflictos con artefactos de desarrollo, pero `build` y `start` usan los defaults de Next.js.
+- Se actualizó la prueba de regresión y la documentación para evitar volver a configurar `NEXT_DIST_DIR` en el build de Vercel.

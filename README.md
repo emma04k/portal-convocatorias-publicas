@@ -123,6 +123,8 @@ npm run build
 
 El script `postinstall` ejecuta `prisma generate` para que Prisma Client esté disponible durante el build/deploy.
 
+Vercel espera encontrar la salida estándar de Next.js en `.next`; por eso el script `build` no debe sobrescribir `NEXT_DIST_DIR`.
+
 ### 4. Aplicar migraciones Prisma en producción
 
 Después de crear la base de datos y configurar `DATABASE_URL`, aplicar las migraciones con:
@@ -148,6 +150,7 @@ Después del primer deploy, revisar manualmente en la URL pública:
 ### Notas operativas
 
 - No se necesita `Dockerfile` ni `docker-compose.yml` para Vercel.
+- No configurar `NEXT_DIST_DIR` en Vercel; el build productivo debe generar `.next`.
 - No subir `.env`, tokens ni credenciales.
 - Si se modifica `prisma/schema.prisma`, crear una migración en desarrollo y luego ejecutar `npm run db:deploy` para aplicarla en Neon.
 - Si Vercel reporta errores de Prisma Client, confirmar que `postinstall` haya ejecutado `prisma generate`.
