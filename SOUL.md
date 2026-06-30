@@ -219,7 +219,7 @@ Iteraciones útiles:
 - Se verificó dentro de Docker con 51 tests, lint y build.
 - `npm audit --audit-level=high` conserva vulnerabilidades transitivas que requieren upgrades breaking (`next`, `eslint-config-next`, `bcrypt`).
 
-### Ajustes posteriores y preparación de despliegue
+### Ajustes posteriores, preparación y despliegue
 
 - Navegación consciente de autenticación: muestra u oculta enlaces según presencia de cookie `auth_token`.
 - Corrección del cambio de contraseña para evitar `Cannot read properties of null (reading 'reset')` cuando la contraseña se actualiza correctamente.
@@ -232,6 +232,9 @@ Iteraciones útiles:
 - Separación local de artefactos de Next.js: `next dev` usa `.next-dev`.
 - Preparación para Vercel + Neon: `postinstall` ejecuta `prisma generate`, `db:deploy` ejecuta `prisma migrate deploy` y `README.md` documenta variables y pasos.
 - Corrección para Vercel: `npm run build` usa `next build` sin `NEXT_DIST_DIR`, generando `.next`, que es la salida esperada por Vercel.
+- Despliegue final completado en Vercel con URL pública: https://portal-convocatorias-publicas-one.vercel.app.
+- Base de datos productiva configurada en Neon; la URL real se mantiene fuera del repositorio y se gestiona como variable de entorno segura.
+- Migraciones de producción aplicadas a Neon desde Docker con `DATABASE_URL='<NEON_DATABASE_URL>' docker compose run --rm --no-deps -e DATABASE_URL app npm run db:deploy`, evitando depender del `node_modules` local.
 
 Última validación relevante ejecutada:
 
@@ -276,8 +279,8 @@ Iteraciones útiles:
 
 ## Qué mejoraría o pediría
 
-- Completar el despliegue final en Vercel + Neon y validar la URL pública con el flujo demo completo.
-- Ejecutar `npm run db:deploy` contra Neon cuando esté configurada la `DATABASE_URL` productiva en un entorno seguro.
+- Mantener un checklist operativo post-deploy para validar periódicamente la URL pública, autenticación, favoritos, búsquedas guardadas y perfil.
+- Automatizar el flujo controlado de release para migraciones nuevas de Prisma usando el mismo patrón seguro aplicado manualmente: inyectar `DATABASE_URL` como variable de entorno y ejecutar `docker compose run --rm --no-deps -e DATABASE_URL app npm run db:deploy` sin exponer la URL real de Neon.
 - Agregar CI en GitHub Actions para lint, tests y build en cada push.
 - Agregar pruebas end-to-end con Playwright para registro, login, browse, favoritos, búsquedas, perfil y logout.
 - Revisar upgrades de seguridad de Next.js, eslint-config-next y bcrypt en una fase explícita de hardening.
@@ -293,11 +296,20 @@ Repositorio publicado:
 
 - https://github.com/emma04k/portal-convocatorias-publicas
 
+Aplicación desplegada:
+
+- https://portal-convocatorias-publicas-one.vercel.app
+
+Base de datos productiva:
+
+- Neon PostgreSQL configurado mediante `DATABASE_URL` en el entorno de despliegue.
+- La URL real de Neon y `JWT_SECRET` no se documentan ni se versionan por seguridad.
+
 Estado actual de Git al reorganizar este documento:
 
 - Rama principal: `main`.
 - Remoto: `origin/main`.
-- El commit `addc9ee fix(deploy): restore Next.js default build output for Vercel` está creado localmente y pendiente de push.
+- La rama local estaba sincronizada con `origin/main` antes de esta actualización documental.
 - No se deben subir secretos, `.env`, URL real de Neon ni `JWT_SECRET` al repositorio.
 
 ## Convención de commits y trazabilidad
