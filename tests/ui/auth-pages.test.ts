@@ -32,6 +32,18 @@ describe("auth and landing pages", () => {
     expect(readRepoFile("tsconfig.json")).toContain(".next-dev/types/**/*.ts");
   });
 
+  it("generates Prisma Client during deployment installs and exposes production migrations", () => {
+    const packageJson = readRepoFile("package.json");
+    const dockerfile = readRepoFile("Dockerfile.dev");
+
+    expect(packageJson).toContain("\"postinstall\": \"prisma generate\"");
+    expect(packageJson).toContain("\"db:deploy\": \"prisma migrate deploy\"");
+    expect(dockerfile).toContain("COPY prisma ./prisma");
+    expect(dockerfile.indexOf("COPY prisma ./prisma")).toBeLessThan(
+      dockerfile.indexOf("RUN npm ci --no-audit --no-fund"),
+    );
+  });
+
   it("hides landing login and register calls to action when the user is authenticated", () => {
     const source = readRepoFile("app/page.tsx");
 

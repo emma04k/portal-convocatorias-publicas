@@ -79,6 +79,79 @@ Detener los servicios:
 docker compose down
 ```
 
+## Despliegue en Vercel + Neon
+
+La opción recomendada para publicar el proyecto sin administrar servidor es desplegar la app Next.js en Vercel y usar Neon como PostgreSQL administrado.
+
+### 1. Crear la base de datos en Neon
+
+1. Crear un proyecto en [Neon](https://neon.com).
+2. Copiar el connection string PostgreSQL del proyecto.
+3. Usar una URL con SSL habilitado, por ejemplo:
+
+```env
+DATABASE_URL="postgresql://<user>:***@<host>/<database>?sslmode=require"
+```
+
+No guardar esta URL en Git ni pegarla en archivos versionados.
+
+### 2. Configurar variables en Vercel
+
+En `Project Settings > Environment Variables`, agregar al menos:
+
+```env
+DATABASE_URL="postgresql://<user>:***@<host>/<database>?sslmode=require"
+JWT_SECRET="<set-production-strong-secret>"
+```
+
+`JWT_SECRET` debe ser un valor fuerte generado fuera del repositorio. Ejemplo local para generarlo:
+
+```bash
+openssl rand -base64 32
+```
+
+### 3. Importar el repositorio en Vercel
+
+1. Crear un nuevo proyecto en [Vercel](https://vercel.com).
+2. Importar el repositorio de GitHub.
+3. Mantener el preset de framework como `Next.js`.
+4. Usar el build command por defecto del proyecto:
+
+```bash
+npm run build
+```
+
+El script `postinstall` ejecuta `prisma generate` para que Prisma Client esté disponible durante el build/deploy.
+
+### 4. Aplicar migraciones Prisma en producción
+
+Después de crear la base de datos y configurar `DATABASE_URL`, aplicar las migraciones con:
+
+```bash
+npm run db:deploy
+```
+
+Este comando ejecuta `prisma migrate deploy`, que es el flujo apropiado para producción. No usar `prisma migrate dev` contra la base de datos productiva.
+
+### 5. Validar el despliegue
+
+Después del primer deploy, revisar manualmente en la URL pública:
+
+1. Crear una cuenta en `/auth/register`.
+2. Iniciar sesión en `/auth/login`.
+3. Buscar convocatorias en `/convocatorias`.
+4. Guardar una convocatoria como favorita y revisar `/bookmarks`.
+5. Guardar una búsqueda y revisar `/saved-searches`.
+6. Abrir `/profile` y confirmar que la sesión funciona.
+7. Cerrar sesión y confirmar que las rutas privadas redirigen a login.
+
+### Notas operativas
+
+- No se necesita `Dockerfile` ni `docker-compose.yml` para Vercel.
+- No subir `.env`, tokens ni credenciales.
+- Si se modifica `prisma/schema.prisma`, crear una migración en desarrollo y luego ejecutar `npm run db:deploy` para aplicarla en Neon.
+- Si Vercel reporta errores de Prisma Client, confirmar que `postinstall` haya ejecutado `prisma generate`.
+
 ## Endpoints principales
 
 Autenticación:

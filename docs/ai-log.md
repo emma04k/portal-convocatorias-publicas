@@ -163,3 +163,11 @@
 - Esto evita que ejecutar `npm run build` dentro del contenedor de desarrollo sobrescriba el directorio usado por `next dev` y deje la pantalla inicial sin CSS global.
 - Se actualizaron `tsconfig.json` y `.gitignore` para reconocer e ignorar los nuevos directorios de salida de Next.js.
 - Se agregó prueba de regresión para asegurar que los scripts y `next.config.mjs` mantengan separados los artefactos.
+
+## Preparación de despliegue — Vercel + Neon
+
+- Se documentó el flujo recomendado para publicar la app en Vercel usando Neon PostgreSQL como base de datos administrada.
+- Se agregó `postinstall` para ejecutar `prisma generate` durante la instalación de dependencias en plataformas de despliegue.
+- Se agregó `db:deploy` como alias seguro para aplicar migraciones productivas con `prisma migrate deploy`.
+- Se ajustó `Dockerfile.dev` para copiar `prisma/` antes de `npm ci`, evitando que el `postinstall` falle dentro del build de Docker.
+- Se incorporó una prueba de regresión para cubrir los scripts de preparación de despliegue.
