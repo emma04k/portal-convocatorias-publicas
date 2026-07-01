@@ -74,6 +74,20 @@ describe("calls browsing UI", () => {
     expect(styles).toContain("cursor: not-allowed;");
   });
 
+  it("prevents convocatoria cards and actions from overflowing with long SECOP text", () => {
+    const styles = read("app/globals.css");
+
+    expect(styles).toMatch(/\.call-card\s*\{[^}]*overflow: hidden;[^}]*min-width: 0;/s);
+    expect(styles).toMatch(/\.call-card h2\s*\{[^}]*max-width: 100%;[^}]*overflow-wrap: anywhere;/s);
+    expect(styles).toMatch(/\.call-card p\s*\{[^}]*max-width: 100%;[^}]*overflow-wrap: anywhere;/s);
+    expect(styles).toMatch(/\.call-meta dd,\n\.detail-list dd\s*\{[^}]*max-width: 100%;[^}]*overflow-wrap: anywhere;/s);
+    expect(styles).toMatch(/\.card-kicker\s*\{[^}]*gap: 0\.5rem;[^}]*min-width: 0;/s);
+    expect(styles).toMatch(/\.card-kicker > \*\s*\{[^}]*min-width: 0;[^}]*max-width: 100%;/s);
+    expect(styles).toMatch(/\.status-badge\s*\{[^}]*min-width: 0;[^}]*max-width: 100%;[^}]*overflow-wrap: anywhere;/s);
+    expect(styles).toMatch(/\.card-actions\s*\{[^}]*display: grid;[^}]*align-items: stretch;[^}]*grid-template-columns: 1fr;[^}]*max-width: 100%;/s);
+    expect(styles).toMatch(/\.card-actions a,\n\.card-actions button\s*\{[^}]*justify-content: center;[^}]*min-height: 44px;[^}]*min-width: 0;[^}]*text-align: center;[^}]*white-space: nowrap;[^}]*width: 100%;/s);
+  });
+
   it("renders a detail page that can save a convocatoria as bookmark", () => {
     const page = read("app/convocatorias/[externalId]/page.tsx");
     const detail = read("components/convocatorias/convocatoria-detail.tsx");

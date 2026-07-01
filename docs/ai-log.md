@@ -190,3 +190,10 @@
 - Se reemplazó el feedback inline de actualizar perfil y cambiar contraseña por modales SweetAlert2 con mensajes de éxito/error en español.
 - El cambio de contraseña conserva la referencia estable del formulario antes del `await` y solo limpia los campos cuando la API responde correctamente.
 - Se agregó `sweetalert2` como dependencia runtime y se actualizó la prueba source-level del flujo de perfil.
+
+## Ajuste UI — Tarjetas de convocatorias sin desbordes
+
+- Se reforzaron las tarjetas de convocatorias contra textos largos de SECOP: títulos, entidad, estado, fuente y metadatos ahora respetan el ancho del card con `min-width: 0`, `max-width: 100%` y quiebres seguros.
+- Las acciones de cada tarjeta pasan a una grilla responsive para que `Ver detalle`, `Fuente SECOP` y `Guardar favorito` mantengan jerarquía visual, objetivo táctil de 44px y no sobresalgan del contenedor.
+- Los botones de acción de las tarjetas se apilan a ancho completo con altura consistente y texto en una línea, evitando saltos visuales como `Fuente SECOP` en dos líneas junto a `Guardar favorito` aislado.
+- Se agregó prueba source-level de regresión para cubrir el layout anti-overflow de tarjetas y acciones.
