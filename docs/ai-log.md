@@ -184,3 +184,9 @@
 - Se corrigió el script `build` para que Vercel genere la salida estándar `.next` esperada por su runtime de Next.js.
 - `next dev` mantiene `NEXT_DIST_DIR=.next-dev` para evitar conflictos con artefactos de desarrollo, pero `build` y `start` usan los defaults de Next.js.
 - Se actualizó la prueba de regresión y la documentación para evitar volver a configurar `NEXT_DIST_DIR` en el build de Vercel.
+
+## Ajuste UI — Alertas de perfil con SweetAlert2
+
+- Se reemplazó el feedback inline de actualizar perfil y cambiar contraseña por modales SweetAlert2 con mensajes de éxito/error en español.
+- El cambio de contraseña conserva la referencia estable del formulario antes del `await` y solo limpia los campos cuando la API responde correctamente.
+- Se agregó `sweetalert2` como dependencia runtime y se actualizó la prueba source-level del flujo de perfil.

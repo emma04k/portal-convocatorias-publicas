@@ -29,14 +29,28 @@ describe("profile and demo documentation", () => {
     expect(profile).not.toContain("event.currentTarget.reset();");
   });
 
-  it("shows dedicated success messages after updating profile data and password", () => {
+  it("uses SweetAlert2 for account and password feedback instead of stale inline-only messages", () => {
     const profile = read("components/profile/profile-manager.tsx");
+    const packageJson = read("package.json");
 
-    expect(profile).toContain("accountMessage");
-    expect(profile).toContain("passwordMessage");
-    expect(profile).toContain("Tus datos de perfil se actualizaron correctamente.");
+    expect(packageJson).toContain('"sweetalert2"');
+    expect(profile).toContain('import Swal from "sweetalert2";');
+    expect(profile).toContain("showProfileAlert({");
+    expect(profile).toContain("Swal.fire");
+    expect(profile).toContain("icon: \"success\"");
+    expect(profile).toContain("icon: \"error\"");
+    expect(profile).toContain('title: "Perfil actualizado"');
+    expect(profile).toContain("Tus datos se actualizaron correctamente.");
+    expect(profile).toContain('title: "No se pudo actualizar"');
+    expect(profile).toContain("No fue posible actualizar tu cuenta.");
+    expect(profile).toContain('title: "Contraseña actualizada"');
     expect(profile).toContain("Tu contraseña se actualizó correctamente.");
-    expect(profile).toContain("aria-live=\"polite\"");
+    expect(profile).toContain('title: "No se pudo cambiar la contraseña"');
+    expect(profile).toContain("Verifica tu contraseña actual e intenta nuevamente.");
+    expect(profile).not.toContain("const [accountMessage");
+    expect(profile).not.toContain("const [passwordMessage");
+    expect(profile).not.toContain("{accountMessage ?");
+    expect(profile).not.toContain("{passwordMessage ?");
   });
 
   it("documents the end-to-end demo flow and security checklist", () => {

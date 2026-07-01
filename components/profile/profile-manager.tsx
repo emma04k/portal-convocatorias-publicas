@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useEffect, useState } from "react";
+import Swal from "sweetalert2";
 
 type Profile = {
   user: {
@@ -14,11 +15,24 @@ type Profile = {
   };
 };
 
+type ProfileAlert = {
+  icon: "success" | "error";
+  title: string;
+  text: string;
+};
+
+function showProfileAlert({ icon, title, text }: ProfileAlert) {
+  return Swal.fire({
+    icon,
+    title,
+    text,
+    confirmButtonText: "Entendido",
+  });
+}
+
 export function ProfileManager() {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [message, setMessage] = useState<string | null>(null);
-  const [accountMessage, setAccountMessage] = useState<string | null>(null);
-  const [passwordMessage, setPasswordMessage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   async function loadProfile() {
@@ -52,12 +66,20 @@ export function ProfileManager() {
     });
 
     if (!response.ok) {
-      setAccountMessage("No fue posible actualizar tu cuenta.");
+      await showProfileAlert({
+        icon: "error",
+        title: "No se pudo actualizar",
+        text: "No fue posible actualizar tu cuenta.",
+      });
       return;
     }
 
     setMessage(null);
-    setAccountMessage("Tus datos de perfil se actualizaron correctamente.");
+    await showProfileAlert({
+      icon: "success",
+      title: "Perfil actualizado",
+      text: "Tus datos se actualizaron correctamente.",
+    });
     await loadProfile();
   }
 
@@ -75,12 +97,21 @@ export function ProfileManager() {
     });
 
     setMessage(null);
-    setPasswordMessage(
-      response.ok ? "Tu contraseña se actualizó correctamente." : "No fue posible cambiar la contraseña.",
-    );
-    if (response.ok) {
-      passwordForm.reset();
+    if (!response.ok) {
+      await showProfileAlert({
+        icon: "error",
+        title: "No se pudo cambiar la contraseña",
+        text: "Verifica tu contraseña actual e intenta nuevamente.",
+      });
+      return;
     }
+
+    await showProfileAlert({
+      icon: "success",
+      title: "Contraseña actualizada",
+      text: "Tu contraseña se actualizó correctamente.",
+    });
+    passwordForm.reset();
   }
 
   if (isLoading) {
@@ -126,11 +157,6 @@ export function ProfileManager() {
             </label>
             <button type="submit">Actualizar perfil</button>
           </form>
-          {accountMessage ? (
-            <p className="form-message" role="status" aria-live="polite">
-              {accountMessage}
-            </p>
-          ) : null}
         </section>
 
         <section className="content-card">
@@ -146,11 +172,6 @@ export function ProfileManager() {
             </label>
             <button type="submit">Cambiar contraseña</button>
           </form>
-          {passwordMessage ? (
-            <p className="form-message" role="status" aria-live="polite">
-              {passwordMessage}
-            </p>
-          ) : null}
         </section>
       </div>
     </section>
