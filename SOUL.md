@@ -226,6 +226,7 @@ Iteraciones útiles:
 - Feedback de perfil mejorado con SweetAlert2 para actualizar cuenta y cambiar contraseña, manteniendo mensajes de éxito/error en español y el reset seguro del formulario solo cuando la API responde correctamente.
 - Landing adaptada para ocultar `Iniciar sesión` y `Crear cuenta` cuando el usuario ya está autenticado.
 - Pulido visual de la landing, navegación, tarjetas, estados de carga/vacío y accesibilidad global con enlace de salto al contenido, foco visible y objetivos táctiles de 44px.
+- Corrección de tarjetas de convocatorias para evitar desbordes con textos largos de SECOP y mantener botones de acción apilados, consistentes, full-width y sin saltos visuales.
 - Filtros SECOP flexibles por entidad y estado usando coincidencia parcial case-insensitive.
 - Aplicación correcta de filtros al ejecutar búsquedas guardadas.
 - Botón `Limpiar filtros` en convocatorias.
@@ -242,17 +243,18 @@ Iteraciones útiles:
 - `docker compose up -d --build`: OK.
 - `docker compose ps`: OK.
 - `docker compose exec app npm run lint`: OK.
-- `docker compose exec app npm run test`: OK, 19 archivos de test y 62 tests pasando.
+- `docker compose exec app npm run test`: OK, 19 archivos de test y 63 tests pasando.
 - `docker compose exec app npm run build`: OK.
 - Verificación de salida `.next`: OK (`vercel-output-ok`).
 - `docker compose down`: OK.
 
-Validación posterior relevante ejecutada dentro de Docker para el pulido UI y SweetAlert2:
+Validación posterior relevante ejecutada dentro de Docker para el pulido UI, SweetAlert2 y tarjetas de convocatorias:
 
 - `docker compose exec app npm ls sweetalert2 --depth=0`: OK, `sweetalert2@11.26.25` instalado en el volumen `node_modules` del contenedor.
 - `docker compose exec app npm run test -- tests/ui/profile-and-demo.test.ts`: OK, 4 tests pasando.
+- `docker compose exec app npm run test -- tests/ui/calls-experience.test.ts`: OK, 5 tests pasando.
 - `docker compose exec app npm run lint`: OK, sin warnings ni errores.
-- `docker compose exec app npm run test`: OK, 19 archivos de test y 62 tests pasando.
+- `docker compose exec app npm run test`: OK, 19 archivos de test y 63 tests pasando.
 - `docker compose exec app npm run build`: OK, compilación productiva exitosa.
 
 ## Decisiones y trade-offs
