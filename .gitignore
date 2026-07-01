@@ -30,3 +30,7 @@ pnpm-debug.log*
 .DS_Store
 .vscode/
 .idea/
+
+# Local AI / agent tooling
+.codegraph/
+.atl/

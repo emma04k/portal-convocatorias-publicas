@@ -18,6 +18,46 @@ describe("auth and landing pages", () => {
     expect(source).toContain("Iniciar sesión");
   });
 
+  it("presents a public-service landing with trust indicators and feature highlights", () => {
+    const source = readRepoFile("app/page.tsx");
+    const styles = readRepoFile("app/globals.css");
+
+    expect(source).toContain("hero-layout");
+    expect(source).toContain("landing-stats");
+    expect(source).toContain("Datos abiertos");
+    expect(source).toContain("SECOP II");
+    expect(source).toContain("feature-grid");
+    expect(source).toContain("Transparencia para decidir mejor");
+    expect(source).toContain("Seguimiento personalizado");
+    expect(source).toContain("Consulta responsable");
+
+    expect(styles).toContain(".hero-layout");
+    expect(styles).toContain("grid-template-columns: minmax(0, 1.15fr) minmax(280px, 0.85fr);");
+    expect(styles).toContain(".landing-stats");
+    expect(styles).toContain(".feature-grid");
+    expect(styles).toContain(".feature-card");
+  });
+
+  it("keeps global navigation accessible with a skip link, focus rings and 44px targets", () => {
+    const layout = readRepoFile("app/layout.tsx");
+    const styles = readRepoFile("app/globals.css");
+
+    expect(layout).toContain("href=\"#main-content\"");
+    expect(layout).toContain("className=\"skip-link\"");
+    expect(layout).toContain("id=\"main-content\"");
+    expect(layout).toContain("tabIndex={-1}");
+
+    expect(styles).toContain("--background: #F8FAFC;");
+    expect(styles).toContain("--foreground: #020617;");
+    expect(styles).toContain("--primary: #0F172A;");
+    expect(styles).toContain("--accent: #0369A1;");
+    expect(styles).toContain("--focus-ring: #B45309;");
+    expect(styles).toContain(":focus-visible");
+    expect(styles).toContain("outline: 3px solid var(--focus-ring);");
+    expect(styles).toContain("min-height: 44px;");
+    expect(styles).toContain(".skip-link:focus");
+  });
+
   it("keeps development artifacts separate while preserving Vercel's default output directory", () => {
     const packageJson = readRepoFile("package.json");
     const nextConfig = readRepoFile("next.config.mjs");

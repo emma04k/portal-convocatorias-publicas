@@ -11,8 +11,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="es">
       <body>
+        <a className="skip-link" href="#main-content">Saltar al contenido principal</a>
         <SiteNav />
-        {children}
+        <div id="main-content" tabIndex={-1}>{children}</div>
       </body>
     </html>
   );

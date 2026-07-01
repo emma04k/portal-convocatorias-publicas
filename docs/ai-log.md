@@ -172,6 +172,13 @@
 - Se ajustó `Dockerfile.dev` para copiar `prisma/` antes de `npm ci`, evitando que el `postinstall` falle dentro del build de Docker.
 - Se incorporó una prueba de regresión para cubrir los scripts de preparación de despliegue.
 
+## Ajuste UI — Pulido visual y accesibilidad
+
+- Se aplicó TDD de source-level para cubrir un nuevo slice de interfaz: landing institucional, enlace de salto al contenido, estados de foco visibles, objetivos táctiles de 44px y estados de carga/vacío de convocatorias.
+- La landing pasó de una tarjeta única a una composición de servicio público con hero, indicadores de confianza y beneficios, conservando el comportamiento de CTAs según autenticación.
+- Se refinó la paleta global hacia navy/azul de alto contraste (`#0F172A`, `#0369A1`, `#F8FAFC`) y se mejoraron botones, navegación, formularios, tarjetas y responsive móvil.
+- Las tarjetas de convocatorias ahora muestran una insignia de estado más clara y los estados de carga/vacío tienen contenedores accesibles con `aria-live="polite"`.
+
 ## Corrección de despliegue — Salida estándar de Next.js en Vercel
 
 - Se corrigió el script `build` para que Vercel genere la salida estándar `.next` esperada por su runtime de Next.js.

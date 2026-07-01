@@ -201,8 +201,13 @@ export function ConvocatoriasBrowser({ initialFilters }: ConvocatoriasBrowserPro
         </button>
       </div>
 
-      {isLoading ? <p>Cargando convocatorias...</p> : null}
-      {!isLoading && items.length === 0 ? <p>No se encontraron convocatorias con esos filtros.</p> : null}
+      {isLoading ? <p className="loading-state" aria-live="polite">Cargando convocatorias...</p> : null}
+      {!isLoading && items.length === 0 ? (
+        <div className="empty-state" aria-live="polite">
+          <p>No se encontraron convocatorias con esos filtros.</p>
+          <p>Prueba ampliar el rango de fechas o usar una palabra clave más general.</p>
+        </div>
+      ) : null}
       <div className="cards-grid">
         {items.map((convocatoria) => (
           <ConvocatoriaCard convocatoria={convocatoria} key={convocatoria.externalId} onBookmark={saveBookmark} />

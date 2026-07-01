@@ -54,6 +54,26 @@ describe("calls browsing UI", () => {
     expect(browser).toContain("useState<Filters>(() => normalizeInitialFilters(initialFilters))");
   });
 
+  it("renders polished loading, empty and status states for the convocatorias experience", () => {
+    const browser = read("components/convocatorias/convocatorias-browser.tsx");
+    const card = read("components/convocatorias/convocatoria-card.tsx");
+    const styles = read("app/globals.css");
+
+    expect(browser).toContain("loading-state");
+    expect(browser).toContain("aria-live=\"polite\"");
+    expect(browser).toContain("empty-state");
+    expect(browser).toContain("No se encontraron convocatorias con esos filtros.");
+    expect(card).toContain("status-badge");
+    expect(card).toContain("card-kicker");
+
+    expect(styles).toContain(".status-badge");
+    expect(styles).toContain(".loading-state,");
+    expect(styles).toContain(".empty-state");
+    expect(styles).toContain("min-height: 44px;");
+    expect(styles).toContain("button:disabled");
+    expect(styles).toContain("cursor: not-allowed;");
+  });
+
   it("renders a detail page that can save a convocatoria as bookmark", () => {
     const page = read("app/convocatorias/[externalId]/page.tsx");
     const detail = read("components/convocatorias/convocatoria-detail.tsx");

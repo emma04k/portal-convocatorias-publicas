@@ -21,8 +21,11 @@ function formatCurrency(value?: number) {
 export function ConvocatoriaCard({ convocatoria, onBookmark }: ConvocatoriaCardProps) {
   return (
     <article className="call-card">
+      <div className="card-kicker">
+        <span className="status-badge">{convocatoria.status ?? "Estado no disponible"}</span>
+        <span>SECOP II</span>
+      </div>
       <div>
-        <p className="eyebrow">{convocatoria.status ?? "Estado no disponible"}</p>
         <h2>{convocatoria.title}</h2>
         <p>{convocatoria.entityName}</p>
       </div>
