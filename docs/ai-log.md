@@ -197,3 +197,9 @@
 - Las acciones de cada tarjeta pasan a una grilla responsive para que `Ver detalle`, `Fuente SECOP` y `Guardar favorito` mantengan jerarquía visual, objetivo táctil de 44px y no sobresalgan del contenedor.
 - Los botones de acción de las tarjetas se apilan a ancho completo con altura consistente y texto en una línea, evitando saltos visuales como `Fuente SECOP` en dos líneas junto a `Guardar favorito` aislado.
 - Se agregó prueba source-level de regresión para cubrir el layout anti-overflow de tarjetas y acciones.
+
+## Documentación — README operativo
+
+- Se reorganizó `README.md` para que funcione como entrada principal del proyecto: problema que resuelve, funcionalidades, stack, arquitectura rápida, ejecución local, despliegue, endpoints, demo, seguridad y pendientes.
+- Se incorporó la URL pública desplegada en Vercel y se mantuvo explícita la regla de no versionar secretos ni URLs reales de base de datos.
+- Se alinearon los comandos de validación con el flujo Docker Compose usado como fuente confiable del proyecto.
